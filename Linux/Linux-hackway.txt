@@ -1,16 +1,14 @@
 如何查找异常用户
-ll /var/security/log
+ll /var/security/log	#安全日志
+vim /etc/hosts.deny   ALL: 188.xxx.xxx.xxx	#黑名单
+cat /etc/passwd   或者 
 
-vim /etc/hosts.deny   ALL: 188.xxx.xxx.xxx
-
-/etc/passwd   或者 
-
-useradd xxx  //加用户
-echo 123456 | paswd --stdin xxx  //加密码
+useradd xxx  #加用户
+echo 123456 | passwd --stdin xxx  #给xxx用户加密码
 
 提权
 cat /etc/passwd
-grep bash /etc/passwd  //过滤出来可登录用户
+grep bash /etc/passwd  #过滤出来可登录用户
 
 隐藏两种层次：
 	一、隐藏 用户 
@@ -32,87 +30,67 @@ grep bash /etc/passwd  //过滤出来可登录用户
 劫持root用户密码
 
 两个软件
-openssh
-openpatch
-cp /ss/sshbd5  /opensshd/sshbd5
-	1、记录root密码（铭文）
-	2、在sshd中添加一个后门密码
+	openssh
+	openpatch
+		cp /ss/sshbd5  /opensshd/sshbd5 #替换掉正常的软件
+	功能：
+		1、记录root密码（铭文）
+		2、在sshd中添加一个后门密码
 用root用户登录以后，可在/tmp/ilog中查看
-cat /tmp/ilog
-cat /tmp/olog  用于及记录用户登录记录
+	cat /tmp/ilog
+	cat /tmp/olog  #用于及记录用户登录记录
 
+nmtui #可以打开图形网络配置的命令
 
-
-
-
-
-
-
-nmtui 打开网络配置的命令
-/etc/sysconfig/network-scripts/ifcfg-ens33  网卡配置文件   
-/etc/hostname  主机名
-service network restart 或者 systemctl restart network  //重启网卡
-systemctl status/stop/start firewalld.service  //查看、关闭、开启防火墙
-systemctl enable/disable firewalld.service  //防火墙开机启动、不启动
-chkconfig --list | grep network  //查看开机是否启动 rhle6 
+/etc/sysconfig/network-scripts/ifcfg-ens33  #网卡配置文件   
+/etc/hostname  #主机名文件
+service network restart 或者 systemctl restart network  #重启网卡
+systemctl status/stop/start firewalld.service  #查看、关闭、开启防火墙
+systemctl enable/disable firewalld.service  #防火墙开机启动、不启动
+chkconfig --list | grep network  #查看开机是否启动 rhle6 
 
 Selunix 
-getforce 
-
-//临时操作
-setenforce 0 //关闭Selunix
-setenforce 1 //开启Selunix
-
-//永久关闭
-vim /ect/selinux/config
-将 SELUNIX 设置为 =disable
+	getforce #可用于操作Selinux开启和关闭的命令 
+	//临时操作
+	setenforce 0 #关闭Selunix
+	setenforce 1 #开启Selunix
+	//永久关闭
+	vim /ect/selinux/config
+	将 SELUNIX 设置为 =disable
 
 //设置开机挂载盘
-vim /etc/fstab
+	vim /etc/fstab  #用于编辑开机挂载的方式，加入以下挂载格式，可以进行开机挂载
+	/dev/sr0 		/mnt	iso9960		defaults	   0	 0  #挂载的格式
+	或者 
+	echo "/dev/cdrom 		/mnt	iso9960		defaults	   0	 0 " >> /etc/fstab  #cdrom 和sr0 是指向同一个文件
 
-/dev/sr0 		/mnt	iso9960		defaults	   0	 0  //挂载的格式
-或者 echo "/dev/cdrom 		/mnt	iso9960		defaults	   0	 0 " >> /etc/fstab  //cdrom 和sr0 是指向同一个文件
-
-umount /mnt/
-mount -a
+	umount /dev/sr0 /mnt/ssss  #将sr0设备挂载到 /mnt/ssss下
+	mount -a
 
 配置本地yum源
-
-cd /etc/yum.respos.d/
-
-ls
-
-rm -f ./*
-
-vim centos.repo
-
-repo文件格式
-[CentOS7]   --》yum源的ID，必须唯一
-name=CentOS-server  --》描述信息
-baseurl=file:///mnt  --》挂载点
-enable=1  --》启用
-gpgcheck=0 --》取消验证
-
-
-yum clean all  清空缓存
-
-tty   //查看终端信息
-
-echo msg > /dev/pts/1  //终端通信
-
-shutdown -h 
-
-shutdown +10  //过10分钟后关机  系统广播
-
-shutdown -c   //取消关机
-
-wall 'msg'   //广播给所有终端
+	cd /etc/yum.respos.d/  #进入到原配置文件中心
+	rm -f ./*  #清除所有的repo文件
+	vim centos.repo  #新建一个配置文件，加入以下格式内容，可以对源进行修改
+	repo文件格式
+		[CentOS7]   --》yum源的ID，必须唯一
+		name=CentOS-server  --》描述信息
+		baseurl=file:///mnt  --》挂载点
+		enable=1  --》启用
+		gpgcheck=0 --》取消验证
+	yum clean all  清空缓存
+	
+	tty   //查看终端信息
+	echo msg > /dev/pts/1  //终端通信格式：
+	shutdown -h 
+	shutdown +10  //过10分钟后关机  系统广播
+	shutdown -c   //取消关机
+	wall 'msg'   //广播给所有终端
 
 内部命令：在系统启动的时候就调入内存的，是常驻的，执行效率高
 外部命令：系统软件功能，用户需要时才从硬盘中读入内存。
 
 区分：
-使用type命令，语法： type + 命令
+	使用type命令，语法： type + 命令
 
 【用户名@主机名：当前目录】#/$ 命令区
 
@@ -142,18 +120,16 @@ ls -l  和  ll  都一样
 
 cd //切换目录
 
-cd/cd ~  //回到家目录
-
-cd .. //回到父目录
-cd /   //到根目录
-cd - //回到上一级
+	cd/cd ~  #回到家目录
+	cd .. #回到父目录
+	cd /   #到根目录
+	cd - #回到上一级
 
 history 
-
-方法1、光标上下键
-方法2、ctrl + r 
-方法3、！168  //执行第168条命令
-方法4、！字符串  //搜索历史最近一个以键入的字符创开头的命令，如：！systemctrl
+	方法1、光标上下键
+	方法2、ctrl + r 
+	方法3、！168  //执行第168条命令
+	方法4、！字符串  //搜索历史最近一个以键入的字符创开头的命令，如：！systemctrl
 
 
 Ctrl+d 《=》 exit
@@ -190,8 +166,8 @@ shutdown
 	5 ：
 	6 ：
 		
-systemctl set-default multi-user.target   //设置默认启动级别为3
-systemctl set-default graphical.target   //设置默认启动级别为5
+systemctl set-default multi-user.target  #设置默认启动级别为3
+systemctl set-default graphical.target   #设置默认启动级别为5
 runlevel 查看当前启动级别
 
 服务来电后自动开机
@@ -299,20 +275,16 @@ top：
 Linux CentoS docker mysql 安装和使用
 
 1. 安装Docker
-# 安装Dokcer
-[root@test2 ~]# yum install -y docker
-# 查看是否安装成功 通过yum安装完成列表并筛选docker安装信息如下所示
-[root@test2 ~]# yum list installed | grep docker
+[root@test2 ~]# yum install -y docker		#通过yum方式安装Dokcer。（ 注：-y表示不再询问，使用默认配置进行安装）
+[root@test2 ~]# yum list installed | grep docker		#查看是否安装成功 通过yum安装完成列表并筛选docker安装信息如下所示：
 docker.x86_64                        2:1.13.1-96.gitb2f74b2.el7.centos @extras  
 docker-client.x86_64                 2:1.13.1-96.gitb2f74b2.el7.centos @extras  
 docker-common.x86_64                 2:1.13.1-96.gitb2f74b2.el7.centos @extras
-​ 注：-y表示不再询问，使用默认配置进行安装。
+​
 
 2. 启动Docker服务
-# 启用Docker服务
-[root@test2 ~]# systemctl start docker
-# 查看Docker状态
-[root@test2 ~]# systemctl status docker
+[root@test2 ~]# systemctl start docker		# 启用Docker服务
+[root@test2 ~]# systemctl status docker		# 查看Docker状态
 ● docker.service - Docker Application Container Engine
    Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; vendor preset: disabled)
    Active: active (running) since 日 2019-06-30 13:28:20 CST; 9s ago
@@ -321,7 +293,6 @@ docker-common.x86_64                 2:1.13.1-96.gitb2f74b2.el7.centos @extras
    CGroup: /system.slice/docker.service
            ├─40684 /usr/bin/dockerd-current --add-runtime docker-runc=/usr/libexec/docker/docker-runc-cur...
            └─40695 /usr/bin/docker-containerd-current -l unix:///var/run/docker/libcontainerd/docker-cont...
-
 6月 30 13:28:18 test2 dockerd-current[40684]: time="2019-06-30T13:28:18.507160774+08:00" level=info ...695"
 6月 30 13:28:19 test2 dockerd-current[40684]: time="2019-06-30T13:28:19.765323180+08:00" level=info ...nds"
 6月 30 13:28:19 test2 dockerd-current[40684]: time="2019-06-30T13:28:19.767794756+08:00" level=info ...rt."
@@ -333,14 +304,14 @@ docker-common.x86_64                 2:1.13.1-96.gitb2f74b2.el7.centos @extras
 6月 30 13:28:20 test2 systemd[1]: Started Docker Application Container Engine.
 6月 30 13:28:20 test2 dockerd-current[40684]: time="2019-06-30T13:28:20.506191917+08:00" level=info ...ock"
 Hint: Some lines were ellipsized, use -l to show in full.
-# 使用Docker命令
-[root@test2 ~]# docker images
+
+[root@test2 ~]# docker images		# 使用Docker命令（注：裸机状态下Docker镜像列表为空。）
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-​ 注：裸机状态下Docker镜像列表为空。
+​ 
 
 3. 使用Docker安装MySQL
-# 使用Docker pull拉取Docker hub仓库中的MySQL镜像
-[root@test2 ~]# docker pull mysql:8.0
+
+[root@test2 ~]# docker pull mysql:8.0		# 使用Docker pull拉取Docker hub仓库中的MySQL镜像（注：docker pull 默认到官方参考拉取 mysql：8.0 镜像名：镜像tag，官方地址为国外地址，下载速度缓慢可进行配置。）
 Trying to pull repository docker.io/library/mysql ... 
 8.0: Pulling from docker.io/library/mysql
 fc7181108d40: Pull complete 
@@ -357,112 +328,24 @@ a742e211b7a2: Pull complete
 f864cfdc0264: Pull complete 
 Digest: sha256:415ac63da0ae6725d5aefc9669a1c02f39a00c574fdbc478dfd08db1e97c8f1b
 Status: Downloaded newer image for docker.io/mysql:8.0
-​ 注：docker pull 默认到官方参考拉取 mysql：8.0 镜像名：镜像tag，官方地址为国外地址，下载速度缓慢可进行配置。
-
-# 修改镜像文件拉取地址为ustc
-[root@test2 ~]# vi /etc/docker/daemon.json
-​ 注：insert编辑内容如下所示，并以wq保存并退出。
+​出现上述信息，则拉去成功。
+[root@test2 ~]# vi /etc/docker/daemon.json		#修改镜像文件拉取地址为ustc，即为以下内容：
 	{
 		"registry-mirrors":["https://docker.mirrors.ustc.edu.cn"]
 	}
-​ 修改完毕后重启Docker服务。
-
-# 重启Docker服务
-[root@test2 ~]# systemctl restart docker  或者 systemctl daemon-reload
-# 查看DOcker内的镜像文件确保MySQL 8.0已成功拉取
-[root@test2 ~]# docker images
+​修改完毕后重启Docker服务。
+[root@test2 ~]# systemctl restart docker	#重启Docker服务
+[root@test2 ~]# systemctl daemon-reload		#同上
+[root@test2 ~]# chkconfig docker on			#设置开机自启动
+[root@test2 ~]# systemctl enable/disable docker		#设置开机自启动/停止
+[root@test2 ~]# docker images  	# 查看DOcker内的镜像文件确保MySQL 8.0已成功拉取
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 docker.io/mysql     8.0                 c7109f74d339        2 weeks ago         443 MB
-
-4. 启动MySQL镜像
-# 启动Docker中的MySQL
-[root@test2 ~]# docker run --name mysql8.0 -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.0
-1c52224315bfd65766724e3238d1c66a9ac93c6b04795776e432aed97b437c28
-​ 注：
-	–name 为服务启动别名设置
-	-p 端口映射 宿主机端口3307：镜像运行端口3306
-	-d 镜像名：tag使用守护进程模式启动
-	-e 设置root账号密码
-# 查看运行的镜像
-[root@test2 ~]# docker ps -a
-CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                               NAMES
-1c52224315bf        mysql:8.0           "docker-entrypoint..."   56 seconds ago      Up 55 seconds       33060/tcp, 0.0.0.0:3307->3306/tcp   mysql8.0
-5. 进入镜像运行MySQL
-# 进入MySQL镜像
-[root@test2 ~]# docker exec -it mysql8.0 /bin/bash
-​ 注：：exec docker进入容器命令 -it 容器中服务别名 /bin/bash 表示命令行模式 与 -d 后台守护进行模式启动 形成两种运行方式
-# 进入MySQL
-root@1c52224315bf:/# cd /usr/bin
-root@1c52224315bf:/usr/bin# mysql -u root -p
-Enter password: 
-Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 9
-Server version: 8.0.16 MySQL Community Server - GPL
-
-​ 至此Doker中安装使用MySQL 8.0完成。
-
-6. 其他命令
-# 删除安装包
-yum remove -y 安装包名
-# 停止/开始服务
-systemctl start docker
-systemctl stop docker
-# 移除已经安装的镜像
-docker rmi 镜像名：tag or 镜像id
-# 停止/启动/删除容器服务
-docker stop 容器服务别名  or 容器id
-docker start 容器服务别名  or 容器id
-docker rm 容器服务别名  or 容器id
-
-设置环境变量和镜像的参数，可以来解决第一个问题，环境变量使用-e的方式设置在镜像名称的前面；镜像的参数需要配置在镜像名称的后面
-
-docker run -d -p 4306:3306
--e MYSQL_USER="fengwei"
--e MYSQL_PASSWORD="pwd123"
--e MYSQL_ROOT_PASSWORD="rootpwd123"
---name mysql001
-mysql/mysql-server
---character-set-server=utf8
---collation-server=utf8_general_ci
-
-环境变量说明：
-	-e MYSQL_USER=”fengwei”：添加用户fengwei
-	-e MYSQL_PASSWORD=”pwd123”：设置fengwei用户的密码为pwd123
-	-e MYSQL_ROOT_PASSWORD=”rootpwd123”：设置root的密码伟rootpwd123
-镜像参数说明：
-–character-set-server=utf8：设置字符集为utf8
-–collation-server=utf8_general_ci：设置字符比较规则为utf8_general_ci
-
-使用SQLyog进行测试，用户名和密码使用上面环境变量中添加的用户fengwei和密码pwd123，出现下图的错误
-2058错误，编码不对
-执行命令进入到容器中的MySql中，执行下面的Sql语句
-ALTER USER 'fengwei'@'%' IDENTIFIED WITH mysql_native_password BY 'password123';
-再用SQLyog测试，连接成功
-上面连接不成功的问题也可以添加镜像参数--default-authentication-plugin=mysql_native_password来解决，完整命令如下
-
-docker run -d -p 4306:3306 
--e MYSQL_USER="fengwei" 
--e MYSQL_PASSWORD="pwd123" 
--e MYSQL_ROOT_PASSWORD="rootpwd123" 
---name mysql001 
-mysql/mysql-server 
---character-set-server=utf8 
---collation-server=utf8_general_ci 
---default-authentication-plugin=mysql_native_password
-
-
-数据和配置挂载到宿主机
-为了安全性，我们应该将数据和配置放到宿主机中，首先执行下面的命令创建data目录和config目录
-
-mkdir mysqltest
-cd mysqltest
-mkdir data
-mkdir config
-执行下面命令进入到config目录中，并在该目录中创建my.cnf配置文件
-cd config
-touch my.cnf
-my.cnf配置文件内容如下
-
+为了安全性，我们应该将数据和配置放到宿主机中，首先执行下面的命令创建data目录、config目录和logs目录，创建目录后面存mysql相关内容：/opt/mysql/data    /opt/mysql/logs    /opt/mysql/conf
+data目录将映射为mysql容器配置的数据文件存放路径
+logs目录将映射为mysql容器的日志目录
+conf目录里的配置文件将映射为mysql容器的配置文件，在conf目录下创建my.cnf文件
+vim /opt/mysql/conf/my.cnf #创建并编辑配置文件，加入以下内容
 [mysqld]
 user=mysql
 character-set-server=utf8
@@ -471,95 +354,52 @@ default_authentication_plugin=mysql_native_password
 default-character-set=utf8
 [mysql]
 default-character-set=utf8
-
-执行下面命令创建容器
-
-docker run -d -p 4306:3306 
---restart always 
---privileged=true
---name mysql001
--e MYSQL_USER="fengwei" 
--e MYSQL_PASSWORD="pwd123" 
--e MYSQL_ROOT_PASSWORD="rootpwd123"
--v=/mysqltest/config/my.cnf:/etc/my.cnf 
--v=/mysqltest/data:/var/lib/mysql 
-mysql/mysql-server
-
-参数说明
-–restart always：开机启动
-–privileged=true：提升容器内权限
--v=/mysqltest/config/my.cnf:/etc/my.cnf：映射配置文件
--v=/mysqltest/data:/var/lib/mysql：映射数据目录
-
-特别说明
-如果没有添加--privileged=true参数，容器创建后不能正常启动，查看日志发现有权限的错误
-容器正常创建启动后，可以用客户端工具进行连接测试。
-
-> 安装Docker
-yum install docker
-
-> 启动docker进程
-service docker start
-
-> docker开机启动
-chkconfig docker on
-
-> 安装mysql(默认拉最新的现在是mysql8.0.15)
-docker pull mysql
-
-> 创建目录后面存mysql相关内容
-/opt/mysql/data          /opt/mysql/logs      /opt/mysql/conf
-data目录将映射为mysql容器配置的数据文件存放路径
-logs目录将映射为mysql容器的日志目录
-conf目录里的配置文件将映射为mysql容器的配置文件
-
-> 运行容器（先进入到/opt/mysql目录下）
-docker run -p 3306:3306 --name mymysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/logs -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql
-
+4. 运行容器（先进入到/opt/mysql目录下）
+docker run 
+	-p 3306:3306  #将容器的 3306 端口映射到主机的 3306 端口
+	--name mysql8.0	#镜像名称
+	-v $PWD/conf:/etc/mysql/conf.d #将主机当前目录下的 conf/my.cnf 挂载到容器的 /etc/mysql/my.cnf
+	-v $PWD/logs:/logs	#将主机当前目录下的 logs 目录挂载到容器的 /logs。
+	-v $PWD/data:/var/lib/mysql	#将主机当前目录下的data目录挂载到容器的 /var/lib/mysql 
+	-e MYSQL_ROOT_PASSWORD=123456	#root用户密码设置
+	-d	#后台运行
+	mysql：tag  #镜像
+	
 有时候会出现Container启动不起来，可以看日志：（发现是权限问题）
-docker logs -t --since 10m mymysql 
-
+docker logs -t --since 10m mysql8.0 
 可以加 --privileged=true
 
-docker run -p 3306:3306 --name mymysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/logs -v $PWD/data:/var/lib/mysql  --privileged=true  -e MYSQL_ROOT_PASSWORD=123456 -d mysql
--p 3306:3306：将容器的 3306 端口映射到主机的 3306 端口。
--v -v $PWD/conf:/etc/mysql/conf.d：将主机当前目录下的 conf/my.cnf 挂载到容器的 /etc/mysql/my.cnf。
--v $PWD/logs:/logs：将主机当前目录下的 logs 目录挂载到容器的 /logs。
--v $PWD/data:/var/lib/mysql ：将主机当前目录下的data目录挂载到容器的 /var/lib/mysql 。
--e MYSQL_ROOT_PASSWORD=123456：初始化 root 用户的密码。
+[root@test2 ~]# docker ps -a	#查看运行的镜像
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                               NAMES
+1c52224315bf        mysql:8.0           "docker-entrypoint..."   56 seconds ago      Up 55 seconds       33060/tcp, 0.0.0.0:3307->3306/tcp   mysql8.0
 
+5. 进入镜像运行MySQL
+[root@test2 ~]# docker exec -it mysql8.0 /bin/bash #进入MySQL容器（注：exec docker：进入容器命令 -it：容器中服务别名 /bin/bash：表示命令行模式与-d后台守护进行模式启动形成两种运行方式）
+[root@test2 ~]# root@1c52224315bf:/# cd /usr/bin	#进入方式
+[root@test2 ~]# root@1c52224315bf:/usr/bin# mysql -u root -p		# 进入MySQL
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.16 MySQL Community Server - GPL
 
-> 进入容器
-docker exec -it mymysql bash
-
+另外：也可在主机上访问docker主机上的mysql
 > 登录mysql
 mysql -u root -p
-> 查看已有用户信息
-
 > 修改mysql8 用户密码sha2问题
 ALTER USER 'root'@'%' IDENTIFIED BY '123456' PASSWORD EXPIRE NEVER;
 ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password by '123456';
 flush privileges;
+至此Doker中安装、调配使用MySQL 8.0完成。
+
+6. 其他命令
+	yum remove -y 安装包名		# 删除安装包
+	systemctl start/stop docker		#开始/停止docker
+	docker rmi 镜像名：tag or 镜像id		# 移除已经安装的镜像
+	docker stop/start 容器服务别名  or 容器id		# 停止/启动/删除容器服务
+	docker rm 容器服务别名  or 容器id	#移除容器
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-this is song 送送送
 
 
 
