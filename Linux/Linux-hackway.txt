@@ -1,0 +1,604 @@
+如何查找异常用户
+ll /var/security/log
+
+vim /etc/hosts.deny   ALL: 188.xxx.xxx.xxx
+
+/etc/passwd   或者 
+
+useradd xxx  //加用户
+echo 123456 | paswd --stdin xxx  //加密码
+
+提权
+cat /etc/passwd
+grep bash /etc/passwd  //过滤出来可登录用户
+
+隐藏两种层次：
+	一、隐藏 用户 
+		usseradd -d  /bin/email email
+		grep bash /etc/passwd  仍然可以被过滤到
+	二、隐藏bash   ()
+		ls /bin/bash
+		cp /bin/bash /sbin/nologin  //考别一下
+		vim /sbin/nologin
+		email --->/sbin/nologin
+		
+查找正常用户
+	一、对比文件	
+		dff /etc/passwd  /opt/passwd
+		vimdiff /xxx  /xxx
+	二、对比密码
+	cat /etc/shadow  (密码存储位置文件)
+		
+劫持root用户密码
+
+两个软件
+openssh
+openpatch
+cp /ss/sshbd5  /opensshd/sshbd5
+	1、记录root密码（铭文）
+	2、在sshd中添加一个后门密码
+用root用户登录以后，可在/tmp/ilog中查看
+cat /tmp/ilog
+cat /tmp/olog  用于及记录用户登录记录
+
+
+
+
+
+
+
+
+nmtui 打开网络配置的命令
+/etc/sysconfig/network-scripts/ifcfg-ens33  网卡配置文件   
+/etc/hostname  主机名
+service network restart 或者 systemctl restart network  //重启网卡
+systemctl status/stop/start firewalld.service  //查看、关闭、开启防火墙
+systemctl enable/disable firewalld.service  //防火墙开机启动、不启动
+chkconfig --list | grep network  //查看开机是否启动 rhle6 
+
+Selunix 
+getforce 
+
+//临时操作
+setenforce 0 //关闭Selunix
+setenforce 1 //开启Selunix
+
+//永久关闭
+vim /ect/selinux/config
+将 SELUNIX 设置为 =disable
+
+//设置开机挂载盘
+vim /etc/fstab
+
+/dev/sr0 		/mnt	iso9960		defaults	   0	 0  //挂载的格式
+或者 echo "/dev/cdrom 		/mnt	iso9960		defaults	   0	 0 " >> /etc/fstab  //cdrom 和sr0 是指向同一个文件
+
+umount /mnt/
+mount -a
+
+配置本地yum源
+
+cd /etc/yum.respos.d/
+
+ls
+
+rm -f ./*
+
+vim centos.repo
+
+repo文件格式
+[CentOS7]   --》yum源的ID，必须唯一
+name=CentOS-server  --》描述信息
+baseurl=file:///mnt  --》挂载点
+enable=1  --》启用
+gpgcheck=0 --》取消验证
+
+
+yum clean all  清空缓存
+
+tty   //查看终端信息
+
+echo msg > /dev/pts/1  //终端通信
+
+shutdown -h 
+
+shutdown +10  //过10分钟后关机  系统广播
+
+shutdown -c   //取消关机
+
+wall 'msg'   //广播给所有终端
+
+内部命令：在系统启动的时候就调入内存的，是常驻的，执行效率高
+外部命令：系统软件功能，用户需要时才从硬盘中读入内存。
+
+区分：
+使用type命令，语法： type + 命令
+
+【用户名@主机名：当前目录】#/$ 命令区
+
+# root  
+$ 普通用户
+
+head -1 /
+
+蓝色  目录 
+黑色   文件
+浅蓝色  连接
+红色   压缩包
+绿色   	可执行文件
+黑底黄色 设备文件
+
+。开头的 隐藏文件
+
+.bashrc 中给命令取别名 alias
+
+ls -a   查看所有
+ls -d  只看目录
+ls -S  按照大小排序
+
+ls -l  和  ll  都一样
+
+临时取别名命令：alias  vimEns33=“vim /etc/../xxxx”
+
+cd //切换目录
+
+cd/cd ~  //回到家目录
+
+cd .. //回到父目录
+cd /   //到根目录
+cd - //回到上一级
+
+history 
+
+方法1、光标上下键
+方法2、ctrl + r 
+方法3、！168  //执行第168条命令
+方法4、！字符串  //搜索历史最近一个以键入的字符创开头的命令，如：！systemctrl
+
+
+Ctrl+d 《=》 exit
+Ctrl+c 《=》 取消正在执行的命令或者程序
+Ctrl+l 《=》 清屏与clear一样
+Ctrl+A 《=》 调到命令头
+Ctrl+E 《=》 调到命令尾
+Ctrl+U 《=》 调到命令头删除
+Ctrl+K 《=》 调到命令尾进行删除
+Ctrl+R 《=》 搜搜历史名利
+
+!$   取用上一个命令的参数
+
+时间：系统时间和硬件时间
+	hwclock:  //查看硬件时间
+	date：		//查看系统时间
+	date -s "2018-11-2  22:30"  //设置时间
+	date "+%F" 
+	time  //测试命令用时
+	man / --help
+	
+shutdown 
+	-r =>重启 
+	-h =>关机 
+	-h 时间 => 定时关机 
+	-c => 取消关机
+	
+启动级别：0-6
+	0 ：
+	1 ：
+	2 ：
+	3 ：
+	4 ：
+	5 ：
+	6 ：
+		
+systemctl set-default multi-user.target   //设置默认启动级别为3
+systemctl set-default graphical.target   //设置默认启动级别为5
+runlevel 查看当前启动级别
+
+服务来电后自动开机
+BIOS -》Interated Peripharals -》SuperIO Divice RestoreOn Ac Power Loss【Power On】
+
+定时关机：
+Power Manager 
+wakeup 
+
+
+
+Linux 系统文件结构
+
+/bin：bin是Binary的缩写, 这个目录存放着最经常使用的命令。
+*/boot：这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。
+/dev ：dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。
+/etc：这个目录用来存放所有的系统管理所需要的配置文件和子目录。
+*/home：用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。
+/lib：这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。
+/lost+found：这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。
+/media linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。
+/mnt：系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。
+/opt：这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。
+/proc：这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_all
+/root：该目录为系统管理员，也称作超级权限者的用户主目录。
+/sbin：s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。
+/selinux：这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。
+/srv：该目录存放一些服务启动之后需要提取的数据。
+/sys：这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。该文件系统是内核设备树的一个直观反映。当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统种被创建。
+/tmp：这个目录是用来存放一些临时文件的。
+/usr：这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似与windows下的program files目录。
+/usr/bin：系统用户使用的应用程序。
+/usr/sbin：超级用户使用的比较高级的管理程序和系统守护程序。
+/usr/src：内核源代码默认的放置目录。
+/var：这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。
+swap：交换分区，扩充内存
+
+在linux系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。
+/etc： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。
+/bin, /sbin, /usr/bin, /usr/sbin: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。
+值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。
+/var： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。
+
+Linux 中文玩
+vmstat
+	结果：
+		pros----memory---swap---io---system---cpu---
+			procs：进程
+				r 表示运行队列
+				b 表示阻塞进程数
+			memory：内存
+				swpd 虚拟机内存已用大小，大于0、表示物理机内存不足
+				free 空闲的内存大小
+				buff 用来存储目录里边的内容权限等缓存
+				cache 直接用来记忆我们打开过的文件，给文件做缓冲
+			swap 交换分区
+				si 每秒从磁盘读入虚拟机的内存大小
+				so 每秒虚拟机写入磁盘的大小
+			io：块设备
+				bi 
+				bo
+			system：
+				in 
+				cs 
+			cpu：中央处理器
+				us 
+				sy 
+				id 
+				
+w：
+	作用：what的简写
+	结果：
+		
+	说明：
+	
+top：
+
+	使用：
+	
+	说民：
+		第一行：功能同w
+		第二行：任务信息
+		第三行：cpu信息
+		第四行：内存信息
+		第五行：交换分区
+		其他行：
+			PID：进程号
+			USER：用户
+			PR：优先级
+			NI：NICE
+			VIRT：虚拟内存总容量
+			RES：虚拟内存中，未被交换的物理内存
+			SHR：共享内存大小
+			S：进程状态
+			%CPU：CPU占用百分比
+			%MEM：内存占用百分比
+			TIME：CPU使用时间
+			COMMAND：进程名/命令
+
+源码编译三板斧：
+	一、./configure --prefix=/usr/../xxx   //配置 
+	二、make -j 4  //编译
+	三、make install //安装
+
+Linux CentoS docker mysql 安装和使用
+
+1. 安装Docker
+# 安装Dokcer
+[root@test2 ~]# yum install -y docker
+# 查看是否安装成功 通过yum安装完成列表并筛选docker安装信息如下所示
+[root@test2 ~]# yum list installed | grep docker
+docker.x86_64                        2:1.13.1-96.gitb2f74b2.el7.centos @extras  
+docker-client.x86_64                 2:1.13.1-96.gitb2f74b2.el7.centos @extras  
+docker-common.x86_64                 2:1.13.1-96.gitb2f74b2.el7.centos @extras
+​ 注：-y表示不再询问，使用默认配置进行安装。
+
+2. 启动Docker服务
+# 启用Docker服务
+[root@test2 ~]# systemctl start docker
+# 查看Docker状态
+[root@test2 ~]# systemctl status docker
+● docker.service - Docker Application Container Engine
+   Loaded: loaded (/usr/lib/systemd/system/docker.service; disabled; vendor preset: disabled)
+   Active: active (running) since 日 2019-06-30 13:28:20 CST; 9s ago
+     Docs: http://docs.docker.com
+ Main PID: 40684 (dockerd-current)
+   CGroup: /system.slice/docker.service
+           ├─40684 /usr/bin/dockerd-current --add-runtime docker-runc=/usr/libexec/docker/docker-runc-cur...
+           └─40695 /usr/bin/docker-containerd-current -l unix:///var/run/docker/libcontainerd/docker-cont...
+
+6月 30 13:28:18 test2 dockerd-current[40684]: time="2019-06-30T13:28:18.507160774+08:00" level=info ...695"
+6月 30 13:28:19 test2 dockerd-current[40684]: time="2019-06-30T13:28:19.765323180+08:00" level=info ...nds"
+6月 30 13:28:19 test2 dockerd-current[40684]: time="2019-06-30T13:28:19.767794756+08:00" level=info ...rt."
+6月 30 13:28:19 test2 dockerd-current[40684]: time="2019-06-30T13:28:19.997012431+08:00" level=info ...lse"
+6月 30 13:28:20 test2 dockerd-current[40684]: time="2019-06-30T13:28:20.245956439+08:00" level=info ...ess"
+6月 30 13:28:20 test2 dockerd-current[40684]: time="2019-06-30T13:28:20.458345533+08:00" level=info ...ne."
+6月 30 13:28:20 test2 dockerd-current[40684]: time="2019-06-30T13:28:20.490475169+08:00" level=info ...ion"
+6月 30 13:28:20 test2 dockerd-current[40684]: time="2019-06-30T13:28:20.490503694+08:00" level=info ...13.1
+6月 30 13:28:20 test2 systemd[1]: Started Docker Application Container Engine.
+6月 30 13:28:20 test2 dockerd-current[40684]: time="2019-06-30T13:28:20.506191917+08:00" level=info ...ock"
+Hint: Some lines were ellipsized, use -l to show in full.
+# 使用Docker命令
+[root@test2 ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+​ 注：裸机状态下Docker镜像列表为空。
+
+3. 使用Docker安装MySQL
+# 使用Docker pull拉取Docker hub仓库中的MySQL镜像
+[root@test2 ~]# docker pull mysql:8.0
+Trying to pull repository docker.io/library/mysql ... 
+8.0: Pulling from docker.io/library/mysql
+fc7181108d40: Pull complete 
+787a24c80112: Pull complete 
+a08cb039d3cd: Pull complete 
+4f7d35eb5394: Pull complete 
+5aa21f895d95: Pull complete 
+a742e211b7a2: Pull complete 
+0163805ad937: Pull complete 
+87f18876c3ff: Pull complete 
+78082f25f167: Pull complete 
+0a510f055c17: Pull complete 
+312b0999e433: Pull complete 
+f864cfdc0264: Pull complete 
+Digest: sha256:415ac63da0ae6725d5aefc9669a1c02f39a00c574fdbc478dfd08db1e97c8f1b
+Status: Downloaded newer image for docker.io/mysql:8.0
+​ 注：docker pull 默认到官方参考拉取 mysql：8.0 镜像名：镜像tag，官方地址为国外地址，下载速度缓慢可进行配置。
+
+# 修改镜像文件拉取地址为ustc
+[root@test2 ~]# vi /etc/docker/daemon.json
+​ 注：insert编辑内容如下所示，并以wq保存并退出。
+	{
+		"registry-mirrors":["https://docker.mirrors.ustc.edu.cn"]
+	}
+​ 修改完毕后重启Docker服务。
+
+# 重启Docker服务
+[root@test2 ~]# systemctl restart docker  或者 systemctl daemon-reload
+# 查看DOcker内的镜像文件确保MySQL 8.0已成功拉取
+[root@test2 ~]# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+docker.io/mysql     8.0                 c7109f74d339        2 weeks ago         443 MB
+
+4. 启动MySQL镜像
+# 启动Docker中的MySQL
+[root@test2 ~]# docker run --name mysql8.0 -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.0
+1c52224315bfd65766724e3238d1c66a9ac93c6b04795776e432aed97b437c28
+​ 注：
+	–name 为服务启动别名设置
+	-p 端口映射 宿主机端口3307：镜像运行端口3306
+	-d 镜像名：tag使用守护进程模式启动
+	-e 设置root账号密码
+# 查看运行的镜像
+[root@test2 ~]# docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                               NAMES
+1c52224315bf        mysql:8.0           "docker-entrypoint..."   56 seconds ago      Up 55 seconds       33060/tcp, 0.0.0.0:3307->3306/tcp   mysql8.0
+5. 进入镜像运行MySQL
+# 进入MySQL镜像
+[root@test2 ~]# docker exec -it mysql8.0 /bin/bash
+​ 注：：exec docker进入容器命令 -it 容器中服务别名 /bin/bash 表示命令行模式 与 -d 后台守护进行模式启动 形成两种运行方式
+# 进入MySQL
+root@1c52224315bf:/# cd /usr/bin
+root@1c52224315bf:/usr/bin# mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.16 MySQL Community Server - GPL
+
+​ 至此Doker中安装使用MySQL 8.0完成。
+
+6. 其他命令
+# 删除安装包
+yum remove -y 安装包名
+# 停止/开始服务
+systemctl start docker
+systemctl stop docker
+# 移除已经安装的镜像
+docker rmi 镜像名：tag or 镜像id
+# 停止/启动/删除容器服务
+docker stop 容器服务别名  or 容器id
+docker start 容器服务别名  or 容器id
+docker rm 容器服务别名  or 容器id
+
+设置环境变量和镜像的参数，可以来解决第一个问题，环境变量使用-e的方式设置在镜像名称的前面；镜像的参数需要配置在镜像名称的后面
+
+docker run -d -p 4306:3306
+-e MYSQL_USER="fengwei"
+-e MYSQL_PASSWORD="pwd123"
+-e MYSQL_ROOT_PASSWORD="rootpwd123"
+--name mysql001
+mysql/mysql-server
+--character-set-server=utf8
+--collation-server=utf8_general_ci
+
+环境变量说明：
+	-e MYSQL_USER=”fengwei”：添加用户fengwei
+	-e MYSQL_PASSWORD=”pwd123”：设置fengwei用户的密码为pwd123
+	-e MYSQL_ROOT_PASSWORD=”rootpwd123”：设置root的密码伟rootpwd123
+镜像参数说明：
+–character-set-server=utf8：设置字符集为utf8
+–collation-server=utf8_general_ci：设置字符比较规则为utf8_general_ci
+
+使用SQLyog进行测试，用户名和密码使用上面环境变量中添加的用户fengwei和密码pwd123，出现下图的错误
+2058错误，编码不对
+执行命令进入到容器中的MySql中，执行下面的Sql语句
+ALTER USER 'fengwei'@'%' IDENTIFIED WITH mysql_native_password BY 'password123';
+再用SQLyog测试，连接成功
+上面连接不成功的问题也可以添加镜像参数--default-authentication-plugin=mysql_native_password来解决，完整命令如下
+
+docker run -d -p 4306:3306 
+-e MYSQL_USER="fengwei" 
+-e MYSQL_PASSWORD="pwd123" 
+-e MYSQL_ROOT_PASSWORD="rootpwd123" 
+--name mysql001 
+mysql/mysql-server 
+--character-set-server=utf8 
+--collation-server=utf8_general_ci 
+--default-authentication-plugin=mysql_native_password
+
+
+数据和配置挂载到宿主机
+为了安全性，我们应该将数据和配置放到宿主机中，首先执行下面的命令创建data目录和config目录
+
+mkdir mysqltest
+cd mysqltest
+mkdir data
+mkdir config
+执行下面命令进入到config目录中，并在该目录中创建my.cnf配置文件
+cd config
+touch my.cnf
+my.cnf配置文件内容如下
+
+[mysqld]
+user=mysql
+character-set-server=utf8
+default_authentication_plugin=mysql_native_password
+[client]
+default-character-set=utf8
+[mysql]
+default-character-set=utf8
+
+执行下面命令创建容器
+
+docker run -d -p 4306:3306 
+--restart always 
+--privileged=true
+--name mysql001
+-e MYSQL_USER="fengwei" 
+-e MYSQL_PASSWORD="pwd123" 
+-e MYSQL_ROOT_PASSWORD="rootpwd123"
+-v=/mysqltest/config/my.cnf:/etc/my.cnf 
+-v=/mysqltest/data:/var/lib/mysql 
+mysql/mysql-server
+
+参数说明
+–restart always：开机启动
+–privileged=true：提升容器内权限
+-v=/mysqltest/config/my.cnf:/etc/my.cnf：映射配置文件
+-v=/mysqltest/data:/var/lib/mysql：映射数据目录
+
+特别说明
+如果没有添加--privileged=true参数，容器创建后不能正常启动，查看日志发现有权限的错误
+容器正常创建启动后，可以用客户端工具进行连接测试。
+
+> 安装Docker
+yum install docker
+
+> 启动docker进程
+service docker start
+
+> docker开机启动
+chkconfig docker on
+
+> 安装mysql(默认拉最新的现在是mysql8.0.15)
+docker pull mysql
+
+> 创建目录后面存mysql相关内容
+/opt/mysql/data          /opt/mysql/logs      /opt/mysql/conf
+data目录将映射为mysql容器配置的数据文件存放路径
+logs目录将映射为mysql容器的日志目录
+conf目录里的配置文件将映射为mysql容器的配置文件
+
+> 运行容器（先进入到/opt/mysql目录下）
+docker run -p 3306:3306 --name mymysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/logs -v $PWD/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql
+
+有时候会出现Container启动不起来，可以看日志：（发现是权限问题）
+docker logs -t --since 10m mymysql 
+
+可以加 --privileged=true
+
+docker run -p 3306:3306 --name mymysql -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/logs -v $PWD/data:/var/lib/mysql  --privileged=true  -e MYSQL_ROOT_PASSWORD=123456 -d mysql
+-p 3306:3306：将容器的 3306 端口映射到主机的 3306 端口。
+-v -v $PWD/conf:/etc/mysql/conf.d：将主机当前目录下的 conf/my.cnf 挂载到容器的 /etc/mysql/my.cnf。
+-v $PWD/logs:/logs：将主机当前目录下的 logs 目录挂载到容器的 /logs。
+-v $PWD/data:/var/lib/mysql ：将主机当前目录下的data目录挂载到容器的 /var/lib/mysql 。
+-e MYSQL_ROOT_PASSWORD=123456：初始化 root 用户的密码。
+
+
+> 进入容器
+docker exec -it mymysql bash
+
+> 登录mysql
+mysql -u root -p
+> 查看已有用户信息
+
+> 修改mysql8 用户密码sha2问题
+ALTER USER 'root'@'%' IDENTIFIED BY '123456' PASSWORD EXPIRE NEVER;
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password by '123456';
+flush privileges;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
