@@ -268,9 +268,9 @@ top：
 			COMMAND：进程名/命令
 
 源码编译三板斧：
-	一、./configure --prefix=/usr/../xxx   //配置 
-	二、make -j 4  //编译
-	三、make install //安装
+	一、./configure --prefix=/usr/../xxx   #安装路径等配置
+	二、make -j 4  #编译
+	三、make install #安装
 
 Linux CentoS docker mysql 安装和使用
 
