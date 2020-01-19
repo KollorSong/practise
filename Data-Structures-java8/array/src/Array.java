@@ -50,6 +50,7 @@ public class Array<T> {
         for (int i = size -1; i >= index ; i--) {
             data[i+1] = data[i];
         }
+        data[size] = null;
         data[index] = e;
         size++;
     }
@@ -87,7 +88,7 @@ public class Array<T> {
 
 
 
-    //删除制定位置的元素
+    //删除指定位置的元素
     public T remove(int index){
         if (index < 0 || index > size)
             throw new IllegalArgumentException("index exception");
@@ -106,7 +107,7 @@ public class Array<T> {
 
     //删除尾元素
     public T removeLast(){
-        return remove(size);
+        return remove(size-1);
     };
 
     //移除第一个制定的元素
