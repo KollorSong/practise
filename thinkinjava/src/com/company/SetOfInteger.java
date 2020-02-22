@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class SetOfInteger {
+
     public static void main(String[] args) {
         Random random;
         random = new Random();
@@ -13,4 +14,5 @@ public class SetOfInteger {
         }
         System.out.println(integers);
     }
+
 }
