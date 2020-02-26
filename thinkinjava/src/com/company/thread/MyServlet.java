@@ -1,4 +1,4 @@
-package com.company;
+package com.company.thread;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;

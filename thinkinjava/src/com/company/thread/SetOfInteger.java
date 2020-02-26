@@ -1,4 +1,4 @@
-package com.company;
+package com.company.thread;
 
 import java.util.HashSet;
 import java.util.Random;
