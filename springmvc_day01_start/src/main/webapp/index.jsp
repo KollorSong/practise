@@ -7,15 +7,16 @@
 
     <h3>入门程序song</h3>
 
-    <a href="user/hello">入门程序</a>
+    <a href="test/hello">入门程序</a>
 
-    <%--<br></br>
+    <br></br>
 
     <a href="test/testRequestMapping">RequestMapping注解</a>
 
     <hr/>
 
-    <a href="param/index">参数测试</a>--%>
+
+    <a href="param/index">参数测试</a>
 
 </body>
 </html>
