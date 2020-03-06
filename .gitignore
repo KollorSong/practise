@@ -19,50 +19,11 @@
 /out/
 
 ### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/eureka/
-/nbdist/
-/.nb-gradle/
-/common-db/build
-/common-model/build
-/common-mybatis-generator/build
-/common-service-facade/build
-/common-util/build
-/console/build
-/console-vue/build
-/im-netty/build
-/im-netty/build
-/mq-statistics/build
-/mq-system/build
-/service-admin-priv/build
-/service-advertising-media/build
-/service-console-base/build
-/service-order/build
-/service-statistics/build
-/service-timertask/build
-/service-user/build
-/sys/build
 
-
-/common-mybatis-generator/src/main/java/com
-/common-mybatis-generator/src/main/resources/com
-/common-mybatis-generator/src/main/resources/db-mysql.properties
-/common-mybatis-generator/resource/db/*.pdb
 log.*.log
 log.log
 log.txt
 ###*/build###
 */out
+*/build
 *.pdb
-
-### 去掉console里面的static目录，开发时启动nodejs就可以啦 ###
-### /console/src/main/resources/static/index.html ###
-### /console/src/main/resources/static/res ###
-
-###  去掉支付宝小程序 ###
-/alipay_xcx/.tea/
-/alipay_autosell_xcx/.tea/
-/alipay_xcx/debug.log
-/alipay_autosell_xcx/debug.log
