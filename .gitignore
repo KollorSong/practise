@@ -18,7 +18,11 @@
 *.DS_Store
 /out/
 
+
 ### NetBeans ###
+
+/*/target/
+/*/out/
 
 log.*.log
 log.log
