@@ -21,6 +21,18 @@ public class BaseDao {
     PreparedStatement preparedStatement = null;
 
     /**
+     * @Description: 获得连接
+     * @author: syq
+     * @Date: 2020/3/8
+     * @param:
+     * @return:
+     * @throws：
+     */
+    public Connection getConnection(){
+        return dbUtil.getConnection();
+    }
+
+    /**
      * @Description: 关闭数据库连接，释放资源
      * @author: syq
      * @Date: 2020/3/7
@@ -31,11 +43,13 @@ public class BaseDao {
     public void release(){  //关闭声明和连接
         if(preparedStatement != null){
             try {
+                //关闭声明
                 preparedStatement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+        //关闭连接
         dbUtil.closeCon();
     }
 
@@ -58,7 +72,12 @@ public class BaseDao {
     }
 
     /**
-     *改变数据库内容操作
+     * @Description: 改变数据库内容操作
+     * @author: syq
+     * @Date: 2020/3/8
+     * @param:
+     * @return:
+     * @throws：
      */
     public boolean update(String sql){
         try {
@@ -70,8 +89,6 @@ public class BaseDao {
     }
 
 
-    public Connection getConnection(){
-        return dbUtil.getConnection();
-    }
+
 
 }

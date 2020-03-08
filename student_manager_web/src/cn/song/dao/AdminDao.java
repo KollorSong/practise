@@ -29,7 +29,8 @@ public class AdminDao extends BaseDao{
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            super.release();
+            //释放资源
+            release();
         }
         return null;
 
