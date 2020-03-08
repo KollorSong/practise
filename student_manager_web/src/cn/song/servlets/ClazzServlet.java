@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**
- *
- * @author llq
  *班级信息管理servlet
  */
 public class ClazzServlet extends HttpServlet {

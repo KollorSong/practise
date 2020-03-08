@@ -18,8 +18,6 @@ import java.util.Map;
 
 
 /**
- *
- * @author llq
  *学生信息管理功能实现servlet
  */
 public class StudentServlet extends HttpServlet {

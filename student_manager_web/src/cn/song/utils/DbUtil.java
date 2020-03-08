@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 /**
  *
- * @author llq
  *数据库连util
  */
 public class DbUtil {

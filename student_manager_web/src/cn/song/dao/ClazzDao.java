@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author llq
  *班级信息数据库操作
  */
 public class ClazzDao extends BaseDao {

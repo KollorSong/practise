@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author llq
  *教师表数据库操作
  */
 public class TeacherDao extends BaseDao {

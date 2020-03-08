@@ -1,8 +1,6 @@
 package cn.song.model;
 
 /**
- *
- * @author llq
  *分页类页码封装
  */
 public class Page {
