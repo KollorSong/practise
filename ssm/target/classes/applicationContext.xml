@@ -25,7 +25,7 @@
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
         <property name="jdbcUrl" value="jdbc:mysql:///ssm"/>
         <property name="user" value="root"/>
-        <property name="password" value="root"/>
+        <property name="password" value="meiyou"/>
     </bean>
 
     <!--配置SqlSessionFactory工厂-->
