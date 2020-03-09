@@ -38,22 +38,22 @@ public class UserController {
      * 请求转发一次请求，不用编写项目的名称
      */
     @RequestMapping("/testVoid")
-    public void testVoid(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public String testVoid(HttpServletRequest request, HttpServletResponse response) throws Exception {
         System.out.println("testVoid方法执行了...");
         // 编写请求转发的程序
-        // request.getRequestDispatcher("/WEB-INF/pages/success.jsp").forward(request,response);
+         request.getRequestDispatcher("/WEB-INF/pages/success.jsp").forward(request,response);
 
         // 重定向
-        // response.sendRedirect(request.getContextPath()+"/index.jsp");
+//         response.sendRedirect(request.getContextPath()+"/index.jsp");
 
         // 设置中文乱码
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
+//        response.setCharacterEncoding("UTF-8");
+//        response.setContentType("text/html;charset=UTF-8");
 
         // 直接会进行响应
-        response.getWriter().print("你好");
+//        response.getWriter().print("你好");
 
-        return;
+        return "success2";
     }
 
     /**
