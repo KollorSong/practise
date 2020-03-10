@@ -5,4 +5,8 @@ public class Filter {
         return getClass().getSimpleName();
     }
 
+    public static void main(String[] args) {
+        new Filter().name();
+    }
+
 }
