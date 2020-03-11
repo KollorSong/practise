@@ -16,13 +16,14 @@
 *.iml
 *.ipr
 *.DS_Store
-/out/
+
 
 
 ### NetBeans ###
-
-/*/target/
-/*/out/
+/out/
+out/
+/target/
+target/
 
 
 log.*.log
