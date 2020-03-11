@@ -33,7 +33,7 @@ public class MyFileTest {
         String str = "张三&$李四（(、，//\'\"\\‘’“”+-*/！!~.。=——？?;；";
         String hexStr = toHexString(str);
         System.out.println(hexStr);
-//        System.out.println(fromHexString(hexStr));
+        System.out.println(fromHexString(hexStr));
     }
 
 
@@ -102,13 +102,11 @@ public class MyFileTest {
         int bit;
         for (int i = 0; i < bs.length; i++) {
             System.out.println(bs[i]);
-            System.out.println(bs[i] >> 4 );
-            System.out.println("==========");
             bit = (bs[i] & 0x0f0) >> 4;
             sb.append(hexArray[bit]);
             bit = bs[i] & 0x0f;
+            System.out.println("==========");
             sb.append(hexArray[bit]);
-            if (i<bs.length-1)sb.append(",");
         }
         hexString = sb.toString();
         return hexString;
