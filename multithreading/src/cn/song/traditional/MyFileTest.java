@@ -1,7 +1,5 @@
 package cn.song.traditional;
 
-import java.io.File;
-
 public class MyFileTest {
 
     private static String cp = "/cn/song/traditional/syscfg.properties";
