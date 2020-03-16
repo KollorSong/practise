@@ -7,14 +7,12 @@ public class MutiThreadShareData {
         final ShareData shareData = new ShareData();
 
         for (int i = 0; i < 2; i++) {
-            new Thread(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            shareData.decrement();
-                        }
-                    }
-            ).start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    shareData.decrement();
+                }
+            }).start();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -49,11 +47,9 @@ class ShareData {
         System.out.println("============");
     }
 
-    public int getJ(){
+    public int getJ() {
         return j;
     }
-
-
 
 
 }
