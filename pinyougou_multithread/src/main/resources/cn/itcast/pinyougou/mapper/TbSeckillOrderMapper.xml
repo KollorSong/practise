@@ -76,9 +76,8 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-    id, seckill_id, money, user_id, seller_id, create_time, pay_time, status, receiver_address, 
-    receiver_mobile, receiver, transaction_id
-  </sql>
+        id,seckill_id, money, user_id, seller_id, create_time, pay_time, status, receiver_address,receiver_mobile, receiver, transaction_id
+    </sql>
     <select id="selectByExample" parameterType="cn.itcast.pinyougou.pojo.TbSeckillOrderExample"
             resultMap="BaseResultMap">
         select
@@ -101,9 +100,10 @@
         where id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from tb_seckill_order
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+        delete
+        from tb_seckill_order
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
     <delete id="deleteByExample" parameterType="cn.itcast.pinyougou.pojo.TbSeckillOrderExample">
         delete from tb_seckill_order
         <if test="_parameter != null">
@@ -111,17 +111,15 @@
         </if>
     </delete>
     <insert id="insert" parameterType="cn.itcast.pinyougou.pojo.TbSeckillOrder">
-    insert into tb_seckill_order (id, seckill_id, money, 
-      user_id, seller_id, create_time, 
-      pay_time, status, receiver_address, 
-      receiver_mobile, receiver, transaction_id
-      )
-    values (#{id,jdbcType=BIGINT}, #{seckillId,jdbcType=BIGINT}, #{money,jdbcType=DECIMAL}, 
-      #{userId,jdbcType=VARCHAR}, #{sellerId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{payTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{receiverAddress,jdbcType=VARCHAR}, 
-      #{receiverMobile,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, #{transactionId,jdbcType=VARCHAR}
-      )
-  </insert>
+        insert into tb_seckill_order (id, seckill_id, money,
+                                      user_id, seller_id, create_time,
+                                      pay_time, status, receiver_address,
+                                      receiver_mobile, receiver, transaction_id)
+        values (#{id,jdbcType=BIGINT}, #{seckillId,jdbcType=BIGINT}, #{money,jdbcType=DECIMAL},
+                #{userId,jdbcType=VARCHAR}, #{sellerId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                #{payTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{receiverAddress,jdbcType=VARCHAR},
+                #{receiverMobile,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, #{transactionId,jdbcType=VARCHAR})
+    </insert>
     <insert id="insertSelective" parameterType="cn.itcast.pinyougou.pojo.TbSeckillOrder">
         insert into tb_seckill_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -310,18 +308,18 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.itcast.pinyougou.pojo.TbSeckillOrder">
-    update tb_seckill_order
-    set seckill_id = #{seckillId,jdbcType=BIGINT},
-      money = #{money,jdbcType=DECIMAL},
-      user_id = #{userId,jdbcType=VARCHAR},
-      seller_id = #{sellerId,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      pay_time = #{payTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=VARCHAR},
-      receiver_address = #{receiverAddress,jdbcType=VARCHAR},
-      receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
-      receiver = #{receiver,jdbcType=VARCHAR},
-      transaction_id = #{transactionId,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+        update tb_seckill_order
+        set seckill_id       = #{seckillId,jdbcType=BIGINT},
+            money            = #{money,jdbcType=DECIMAL},
+            user_id          = #{userId,jdbcType=VARCHAR},
+            seller_id        = #{sellerId,jdbcType=VARCHAR},
+            create_time      = #{createTime,jdbcType=TIMESTAMP},
+            pay_time         = #{payTime,jdbcType=TIMESTAMP},
+            status           = #{status,jdbcType=VARCHAR},
+            receiver_address = #{receiverAddress,jdbcType=VARCHAR},
+            receiver_mobile  = #{receiverMobile,jdbcType=VARCHAR},
+            receiver         = #{receiver,jdbcType=VARCHAR},
+            transaction_id   = #{transactionId,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
 </mapper>

@@ -80,9 +80,9 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-    id, goods_id, item_id, title, small_pic, price, cost_price, seller_id, create_time, 
+        id, goods_id, item_id, title, small_pic, price, cost_price, seller_id, create_time,
     check_time, status, start_time, end_time, num, stock_count, introduction
-  </sql>
+    </sql>
     <select id="selectByExample" parameterType="cn.itcast.pinyougou.pojo.TbSeckillGoodsExample"
             resultMap="BaseResultMap">
         select
@@ -105,9 +105,10 @@
         where id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from tb_seckill_goods
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+        delete
+        from tb_seckill_goods
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
     <delete id="deleteByExample" parameterType="cn.itcast.pinyougou.pojo.TbSeckillGoodsExample">
         delete from tb_seckill_goods
         <if test="_parameter != null">
@@ -115,19 +116,19 @@
         </if>
     </delete>
     <insert id="insert" parameterType="cn.itcast.pinyougou.pojo.TbSeckillGoods">
-    insert into tb_seckill_goods (id, goods_id, item_id, 
-      title, small_pic, price, 
-      cost_price, seller_id, create_time, 
-      check_time, status, start_time, 
-      end_time, num, stock_count, 
-      introduction)
-    values (#{id,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{itemId,jdbcType=BIGINT}, 
-      #{title,jdbcType=VARCHAR}, #{smallPic,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
-      #{costPrice,jdbcType=DECIMAL}, #{sellerId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{checkTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{num,jdbcType=INTEGER}, #{stockCount,jdbcType=INTEGER}, 
-      #{introduction,jdbcType=VARCHAR})
-  </insert>
+        insert into tb_seckill_goods (id, goods_id, item_id,
+                                      title, small_pic, price,
+                                      cost_price, seller_id, create_time,
+                                      check_time, status, start_time,
+                                      end_time, num, stock_count,
+                                      introduction)
+        values (#{id,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{itemId,jdbcType=BIGINT},
+                #{title,jdbcType=VARCHAR}, #{smallPic,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL},
+                #{costPrice,jdbcType=DECIMAL}, #{sellerId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                #{checkTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP},
+                #{endTime,jdbcType=TIMESTAMP}, #{num,jdbcType=INTEGER}, #{stockCount,jdbcType=INTEGER},
+                #{introduction,jdbcType=VARCHAR})
+    </insert>
     <insert id="insertSelective" parameterType="cn.itcast.pinyougou.pojo.TbSeckillGoods">
         insert into tb_seckill_goods
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -368,22 +369,22 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.itcast.pinyougou.pojo.TbSeckillGoods">
-    update tb_seckill_goods
-    set goods_id = #{goodsId,jdbcType=BIGINT},
-      item_id = #{itemId,jdbcType=BIGINT},
-      title = #{title,jdbcType=VARCHAR},
-      small_pic = #{smallPic,jdbcType=VARCHAR},
-      price = #{price,jdbcType=DECIMAL},
-      cost_price = #{costPrice,jdbcType=DECIMAL},
-      seller_id = #{sellerId,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      check_time = #{checkTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=VARCHAR},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
-      num = #{num,jdbcType=INTEGER},
-      stock_count = #{stockCount,jdbcType=INTEGER},
-      introduction = #{introduction,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+        update tb_seckill_goods
+        set goods_id     = #{goodsId,jdbcType=BIGINT},
+            item_id      = #{itemId,jdbcType=BIGINT},
+            title        = #{title,jdbcType=VARCHAR},
+            small_pic    = #{smallPic,jdbcType=VARCHAR},
+            price        = #{price,jdbcType=DECIMAL},
+            cost_price   = #{costPrice,jdbcType=DECIMAL},
+            seller_id    = #{sellerId,jdbcType=VARCHAR},
+            create_time  = #{createTime,jdbcType=TIMESTAMP},
+            check_time   = #{checkTime,jdbcType=TIMESTAMP},
+            status       = #{status,jdbcType=VARCHAR},
+            start_time   = #{startTime,jdbcType=TIMESTAMP},
+            end_time     = #{endTime,jdbcType=TIMESTAMP},
+            num          = #{num,jdbcType=INTEGER},
+            stock_count  = #{stockCount,jdbcType=INTEGER},
+            introduction = #{introduction,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
 </mapper>
