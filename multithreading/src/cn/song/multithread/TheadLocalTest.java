@@ -15,37 +15,45 @@ public class TheadLocalTest {
 //    private  static ThreadLocal<Integer> x = new ThreadLocal<Integer>();
 
     public static void main(String[] args) {
-        for (int i = 0; i < 2; i++) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    new A().get();
-                    new B().get();
-                }
-            }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                A a = new A();
+                B b = new B();
+                b.bSetData("xiaomig",12);
+                a.get();
+                b.get();
+            }
+        }).start();
+    }
 
-            Thread thread = new Thread();
-
-
-        }
+    static void setData(String name ,int age){
+        MyThreadScopeData.getThreadInstance().setName(name);
+        MyThreadScopeData.getThreadInstance().setAge(age);
     }
 
 
     static class A {
-        public void get() {
-            MyThreadScopeData.getThreadInstance().setName("kakak");
-            MyThreadScopeData.getThreadInstance().setAge(12);
+
+        void aSetData(String name ,int age){
+            setData(name,age);
             System.out.println("By A " + Thread.currentThread().getName() + " has reverse data : " + MyThreadScopeData.getThreadInstance());
+        }
+
+        public void get() {
             System.out.println("from A " + Thread.currentThread().getName() + " get data : " + MyThreadScopeData.getThreadInstance());
         }
     }
 
 
     static class B {
-        public void get() {
-            MyThreadScopeData.getThreadInstance().setName("xixixi");
-            MyThreadScopeData.getThreadInstance().setAge(15);
+
+        void bSetData(String name ,int age){
+            setData(name,age);
             System.out.println("By B " + Thread.currentThread().getName() + " has reverse data : " + MyThreadScopeData.getThreadInstance());
+        }
+
+        public void get() {
             System.out.println("from B " + Thread.currentThread().getName() + " get data : " + MyThreadScopeData.getThreadInstance());
         }
     }
@@ -89,5 +97,11 @@ class MyThreadScopeData {
         this.age = age;
     }
 
-
+    @Override
+    public String toString() {
+        return "MyThreadScopeData{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }
