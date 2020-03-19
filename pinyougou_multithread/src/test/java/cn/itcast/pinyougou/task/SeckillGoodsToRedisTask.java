@@ -26,6 +26,7 @@ public class SeckillGoodsToRedisTask {
         TbSeckillGoodsExample example = new TbSeckillGoodsExample();
         TbSeckillGoodsExample.Criteria criteria = example.createCriteria();
         Date date = new Date();
+        System.out.println(date);
         criteria.andStatusEqualTo("1")
                 .andStockCountGreaterThan(0)
                 .andStartTimeLessThanOrEqualTo(date)
