@@ -37,6 +37,8 @@
 
 
   <dependencies>
+
+    <!-- 定时任务调度 -->
     <dependency>
       <groupId>org.quartz-scheduler</groupId>
       <artifactId>quartz</artifactId>
@@ -48,12 +50,14 @@
       <version>2.2.3</version>
     </dependency>
 
+
+    <!-- 阿里云的依赖，（支付） -->
     <dependency>
       <groupId>com.aliyun</groupId>
       <artifactId>aliyun-java-sdk-core</artifactId>
       <version>3.2.5</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/com.aliyun/aliyun-java-sdk-dysmsapi -->
+    <!-- 发短信 -->
     <dependency>
       <groupId>com.aliyun</groupId>
       <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
@@ -96,6 +100,9 @@
       <artifactId>spring-context-support</artifactId>
       <version>${spring.version}</version>
     </dependency>
+
+
+    <!-- Junit测试相关 -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
@@ -106,6 +113,8 @@
       <artifactId>junit</artifactId>
       <version>4.9</version>
     </dependency>
+
+    <!-- json字符串的转化 -->
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
@@ -121,12 +130,15 @@
       <artifactId>commons-codec</artifactId>
       <version>1.10</version>
     </dependency>
+
+    <!-- servlet支持 -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>
       <scope>provided</scope>
     </dependency>
+
     <!-- Mybatis -->
     <dependency>
       <groupId>org.mybatis</groupId>
@@ -138,6 +150,7 @@
       <artifactId>mybatis-spring</artifactId>
       <version>${mybatis.spring.version}</version>
     </dependency>
+    <!-- Mybatis实现分页 -->
     <dependency>
       <groupId>com.github.miemiedev</groupId>
       <artifactId>mybatis-paginator</artifactId>
@@ -149,12 +162,14 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <!-- MySql -->
+
+    <!-- MySql 驱动 -->
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>${mysql.version}</version>
     </dependency>
+
     <!-- 连接池 -->
     <dependency>
       <groupId>com.alibaba</groupId>
@@ -166,7 +181,8 @@
       <artifactId>commons-collections</artifactId>
       <version>3.2.1</version>
     </dependency>
-    <!-- 缓存 -->
+
+    <!-- redis缓存 -->
     <dependency>
       <groupId>redis.clients</groupId>
       <artifactId>jedis</artifactId>
@@ -177,27 +193,36 @@
       <artifactId>spring-data-redis</artifactId>
       <version>1.7.2.RELEASE</version>
     </dependency>
+
+    <!-- Kaptcha 是一个可高度配置的实用验证码生成工具 -->
     <dependency>
       <groupId>com.github.penggle</groupId>
       <artifactId>kaptcha</artifactId>
       <version>2.3.2</version>
       <exclusions>
+        <!-- 因为和servlet有冲突，所以排除了 -->
         <exclusion>
           <groupId>javax.servlet</groupId>
           <artifactId>javax.servlet-api</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
+
+    <!-- dom4j 解析 -->
     <dependency>
       <groupId>dom4j</groupId>
       <artifactId>dom4j</artifactId>
       <version>1.6.1</version>
     </dependency>
+    <!-- 把XML文件的信息读入内存并通过类中的某些方法获取指定节点的名字、值、属性名、属性值这些信息 -->
     <dependency>
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
       <version>1.4.01</version>
     </dependency>
+
+
+
   </dependencies>
 
   <build>
@@ -215,9 +240,8 @@
         </configuration>
       </plugin>
 
+      <!-- tomcat7环境的插件，有了这个插件，可以不用本地配置tomcat -->
       <plugin>
-        <!--<groupId>org.apache.tomcat.maven</groupId>
-        <artifactId>tomcat7-maven-plugin</artifactId>-->
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.2</version>
@@ -226,6 +250,7 @@
           <path>/</path>
         </configuration>
       </plugin>
+
     </plugins>
 
   </build>

@@ -3,13 +3,9 @@
         PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-    <!--mybatis生成工具的帮助文档可以看：-->
-    <!--英文：http://www.mybatis.org/generator/usage/mysql.html-->
-    <!--中文：http://www.mybatis.tk/-->
-    <!--中文：http://mbg.cndocs.tk/-->
 
-    <!-- 获取配置文件 -->
-<!--    <properties resource="db-mysql-static.properties"></properties>-->
+    <!-- 获取配置文件(注意路径，用相对路径即可) -->
+    <properties resource="db/db-mysql-static.properties"></properties>
 
     <!-- 一个数据库一个context -->
     <context id="FCRMTables"  targetRuntime="MyBatis3" >
@@ -21,15 +17,10 @@
         </commentGenerator>
 
         <!-- jdbc连接 -->
-        <!--<jdbcConnection driverClass="${driverClassName}"
-                        connectionURL="${url}"
-                        userId="${user}"
-                        password="${pass}" />-->
-
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://47.95.231.166:3306/minggui_console"
-                        userId="yumlia"
-                        password="123456" />
+        <jdbcConnection driverClass="${jdbc.driverClassName}"
+                        connectionURL="${jdbc.url}"
+                        userId="${jdbc.user}"
+                        password="${jdbc.pass}" />
 
         <!-- 类型转换 -->
         <javaTypeResolver>
@@ -41,7 +32,7 @@
         <javaModelGenerator targetPackage="com.qlm.entity"
                             targetProject="src/main/java" >
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
-            <property name="enableSubPackages" value="true"/>
+            <property name="enableSubPackages" value="false"/>
             <!-- 是否针对string类型的字段在set的时候进行trim调用 -->
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -50,7 +41,7 @@
         <sqlMapGenerator targetPackage="mybatisMapper"
                          targetProject="src/main/resources" >
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
-            <property name="enableSubPackages" value="true" />
+            <property name="enableSubPackages" value="false" />
         </sqlMapGenerator>
 
         <!-- 生成DAO的包名和位置，这里配置将生成的dao类放在me.gacl.dao这个包下 -->
@@ -58,20 +49,23 @@
                              targetProject="src/main/java"
                              type="XMLMAPPER" >
             <!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
-            <property name="enableSubPackages" value="true" />
+            <property name="enableSubPackages" value="false" />
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample
-                是否生成 example类   -->
-        <!-- 更改tableName和domainObjectName就可以 -->
-
-        <table tableName="building"
-               enableCountByExample="true"
-               enableDeleteByExample="true"
-               enableSelectByExample="true"
-               enableUpdateByExample="true">
-            <generatedKey column="Id" sqlStatement="mysql" identity="true"/>
+        <!--    schema即为数据库名;
+                tableName为对应的数据库表;
+                domainObjectName是要生成的实体类;(当驼峰命名开启后，可自动开启类名命名)
+                enable*ByExample是否生成 example类   -->
+        <table schema="minggui_console"
+               tableName="coupons_fridge"
+               domainObjectName="CouponsFridge"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false" >
+            <property name="useActualColumnNames" value="true"/> <!-- useActualColumnNames ：代表开启驼峰命名  -->
         </table>
 
     </context>

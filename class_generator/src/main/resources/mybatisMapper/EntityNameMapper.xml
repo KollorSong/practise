@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qlm.dao.EntityNameMapper">
+  <resultMap id="BaseResultMap" type="com.qlm.entity.EntityName">
+    <result column="coupons_id" jdbcType="BIGINT" property="coupons_id" />
+    <result column="fridge_id" jdbcType="BIGINT" property="fridge_id" />
+  </resultMap>
+  <insert id="insert" parameterType="com.qlm.entity.EntityName">
+    insert into coupons_fridge (coupons_id, fridge_id)
+    values (#{coupons_id,jdbcType=BIGINT}, #{fridge_id,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qlm.entity.EntityName">
+    insert into coupons_fridge
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="coupons_id != null">
+        coupons_id,
+      </if>
+      <if test="fridge_id != null">
+        fridge_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="coupons_id != null">
+        #{coupons_id,jdbcType=BIGINT},
+      </if>
+      <if test="fridge_id != null">
+        #{fridge_id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+</mapper>
