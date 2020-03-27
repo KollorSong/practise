@@ -64,7 +64,7 @@ Selunix
 	或者 
 	echo "/dev/cdrom 		/mnt	iso9960		defaults	   0	 0 " >> /etc/fstab  #cdrom 和sr0 是指向同一个文件
 
-	umount /dev/sr0 /mnt/ssss  #将sr0设备挂载到 /mnt/ssss下
+	mount /dev/sr0 /mnt/ssss  #将sr0设备挂载到 /mnt/ssss下
 	mount -a
 
 配置本地yum源
@@ -181,11 +181,13 @@ wakeup
 
 Linux 系统文件结构
 
+/ :根分区
+swap：交换分区，扩充内存
 /bin：bin是Binary的缩写, 这个目录存放着最经常使用的命令。
-*/boot：这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。
+/boot：这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。
 /dev ：dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。
 /etc：这个目录用来存放所有的系统管理所需要的配置文件和子目录。
-*/home：用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。
+/home：用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。
 /lib：这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。
 /lost+found：这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。
 /media linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。
@@ -203,7 +205,6 @@ Linux 系统文件结构
 /usr/sbin：超级用户使用的比较高级的管理程序和系统守护程序。
 /usr/src：内核源代码默认的放置目录。
 /var：这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。
-swap：交换分区，扩充内存
 
 在linux系统中，有几个目录是比较重要的，平时需要注意不要误删除或者随意更改内部文件。
 /etc： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。
@@ -363,7 +364,7 @@ docker run
 	-v $PWD/data:/var/lib/mysql	#将主机当前目录下的data目录挂载到容器的 /var/lib/mysql 
 	-e MYSQL_ROOT_PASSWORD=123456	#root用户密码设置
 	-d	#后台运行
-	mysql：tag  #镜像
+	mysql：tag  #目标镜像
 	
 有时候会出现Container启动不起来，可以看日志：（发现是权限问题）
 docker logs -t --since 10m mysql8.0 
@@ -399,15 +400,54 @@ flush privileges;
 	docker rm 容器服务别名  or 容器id	#移除容器
 
 
+centos7安装jdk：
+1. 下载jdk的rpm安装包
+centos7下载jdk方式：要加一个--no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie;"参数
+wget --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie;" https://download.oracle.com/otn-pub/java/jdk/14+36/076bab302c7b4508975440c56f6cc26a/jdk-14_linux-x64_bin.rpm
+2. sudo rpm -ivh jdk*    #默认将文件安装到/usr/java目录下
+3. vim /etc/profile    #更改环境变量
+export JAVA_HOME=/usr/java/jdks/jdk-14
+export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export PATH=$PATH:$JAVA_HOME/bin
+4. source /etc/profile
 
 
 
 
-
-
-
-
-
+#用rpm命令处理软件#
+rpm -i #安装
+-v #显示过程
+-h #hash加密
+-e #卸载
+-q #查看
+-a #所有
+-p #软件包
+-ql #查看软件在系统中的安装文件路径
+-qlp #查看未安装软件包在系统中如果安装后产生文件的路径
+-qf #根据某个文件找出包含此文件的安装包
+-qc #查看软件的配置文件名称
+-qd #查看软件的帮助文件
+–scripts #查看脚本
+–nodeps #安装软件忽略依赖性
+–force #强行安装软件
+-Kv #检测软件包是否被篡改
+卸载软件wps-office rpm -e wps-office
+安装软件wps: rpm -ivh wps-office-10.1.0.5672-1.a21.x86_64.rpm
+##软件包名称详解：
+wps-office-10.1.0.5672-1.a21.x86_64.rpm
+    【1】     【2】    【3】  【4】【5】
+【1】 软件名称
+【2】 版本
+【3】 适用系统
+【4】 架构
+【5】 适用rpm体系软件
+rehhat packages manager
+#############################################################
+解决所有软件的安装问题：rpm
+但是它只告诉软件的依赖性，并不给解决
+rpm -ivh
+i:安装 ；v:显示 ；h:hash加密。
+忽略软件依赖性，安装好了并不能直接用
 
 
 
