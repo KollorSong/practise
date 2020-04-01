@@ -1,0 +1,10 @@
+导航条底色显示
+
+/* 导航条背景色*/
+.skin-box-bd .menu-list{background:none repeat scroll 0 0 #00FF00;}
+/* 导航条链接色*/
+.skin-box-bd .menu-list .link{background:#70DB93 ;}
+/*所有分类背景色*/
+.all-cats .link{background:none repeat scroll 0 0 #E47833;}
+/*导航栏右边线代码*/
+.skin-box-bd .menu-list{border-right: 6px #3232CD solid;}
