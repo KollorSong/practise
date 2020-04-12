@@ -435,6 +435,15 @@ mysql -u root -p
 > 修改mysql8 用户密码sha2问题
 ALTER USER 'root'@'%' IDENTIFIED BY 'meiyou' PASSWORD EXPIRE NEVER;
 ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password by 'meiyou';
+
+
+
+
+ALTER USER 'mslave'@'192.168.40.%' IDENTIFIED BY 'meiyou' PASSWORD EXPIRE NEVER;
+ALTER USER 'mslave'@'192.168.40.%' IDENTIFIED WITH mysql_native_password by 'meiyou';
+
+
+
 flush privileges;
 至此Doker中安装、调配使用MySQL 8.0完成。
 
@@ -444,6 +453,7 @@ flush privileges;
 	docker rmi 镜像名：tag or 镜像id		# 移除已经安装的镜像
 	docker stop/start 容器服务别名  or 容器id		# 停止/启动/删除容器服务
 	docker rm 容器服务别名  or 容器id	#移除容器
+	docker inspect container_name | grep Mounts -A 20  #查看容器挂载情况
 
 
 centos7安装jdk：
@@ -537,33 +547,93 @@ i:安装 ；v:显示 ；h:hash加密。
 
 
 
+同步服务器的时间
+1.安装ntpdate工具
+sudo yum -y install ntp ntpdate
+2.设置系统时间与网络时间同步
+sudo ntpdate cn.pool.ntp.org
+3.将系统时间写入硬件时间
+sudo hwclock --systohc
 
 
 
 
+在配置之前，如果数据库已存在数据，请先进行备份
+mysqldump -uroot -pmysql --all-databases --lock-all-tables > ~/master_db.sql
+
+-u ：用户名
+-p ：示密码
+--all-databases ：导出所有数据库
+--lock-all-tables ：执行操作时锁住所有表，防止操作时有数据修改
+~/master_db.sql :导出的备份数据（sql文件）位置，可自己指定
+
+2、主从配置
+演示的环境如下：
+名称
+IP
+msyql-master（主库）
+192.168.40.123
+mysql-slave（从库）
+192.168.40.45/46/47
+
+首先在这四台服务器安装mysql数据库
+（1）配置主库
+修改my.cnf文件，
 
 
+[mysqld]
+server-id = 1
+log-bin = mysql-bin
+binlog_format = ROW
+
+修改好配置文件，重启mysql服务
+service mysqld restart
+
+创建从库同步数据的账号
+mysql> create user 'mslave'@'192.168.40.%' identified by 'meiyou';
+mysql> grant all privileges on *.* to 'mslave'@'192.168.40.%' with grant option;（grant 权限列表 on 数据库 to 用户名@访问主机）
+
+#sha2问题
+mysql> ALTER USER 'mslave'@'192.168.40.%' IDENTIFIED BY 'meiyou' PASSWORD EXPIRE NEVER;
+mysql> ALTER USER 'mslave'@'192.168.40.%' IDENTIFIED WITH mysql_native_password by 'meiyou';
+
+mysql> flush privileges;
+
+192.168.50.% 表示该网段下的从服务器
+*.* 为当前服务器所有库所有表
+with grant option 为表示该用户可以将自己拥有的权限授权给别人
+mslave 为可设置的新用户名
+password 为可设置的密码
+flush privileges 命令本质上的作用是将当前user和privilige表中的用户信息/权限设置从mysql库(MySQL数据库的内置库)中提取到内存里。MySQL用户数据和权限有修改后，希望在"不重启MySQL服务"的情况下直接生效，那么就需要执行这个命令。通常是在修改ROOT帐号的设置后，怕重启后无法再登录进来，那么直接flush之后就可以看权限设置是否生效。而不必冒太大风险。
 
 
+注意：上面这两个命令是在mysql的终端执行的。
 
+查看主库的状态：
+mysql的终端执行:
+show master status\G;
 
+注意会在这里得到一个sql的执行文件，加入到从服务器的配置中
 
+（2）配置从库
+修改my.cnf文件，
+[mysqld]
+server-id = 2
+log-bin = mysql-bin
+binlog_format = ROW
 
+修改好配置文件，重启mysql服务
+service mysqld restart
 
+执行同步命令
+mysql的终端执行:
+# 设置主服务器ip，同步账号密码，同步位置
+change master to master_host='192.168.40.123',master_user='mslave',master_password='meiyou',master_log_file='mysql-bin.000005';
 
+# 开启同步功能
+start slave;
 
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
+查看从库的状态
+mysql的终端执行:
+show slave status\G;
 

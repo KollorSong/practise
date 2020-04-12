@@ -1,0 +1,53 @@
+.skin-box-bd {
+    background: #FF949A;
+}
+
+.skin-box-bd .menu-list {
+    background: #FF949A;
+}
+
+.skin-box-bd .menu-list .link {
+    background: #FF949A;
+}
+
+.all-cats .link {
+    background: #FF949A;
+}
+
+.skin-box-bd .menu-list .menu-selected .link {
+    background: #FF949A;
+}
+
+.skin-box-bd .menu-list .menu-selected .link .title {
+    background: #FF949A;
+}
+
+.popup-content {
+    background: #FFCCCE;
+}
+
+.popup-content .cats-tree .snd-pop-inner {
+    background: #FFCCCE;
+}
+
+.menu-list .menu-hover .title {
+    color: gold;
+}
+
+.all-cats-hover .link .title {
+    color: gold;
+}
+
+.menu-popup-cats .sub-cat-hover .cat-name {
+    color: gold;
+}
+
+.popup-content .cat-hd-hover .cat-name {
+    color: gold;
+}
+
+.popup-content .cats-tree .snd-cat-hd-hover .cat-name {
+    color: gold;
+}
+
+.popup-content .cats-tree .snd-pop-inner .cat-name{color:#ffc093;}
