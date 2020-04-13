@@ -1,3 +1,44 @@
+1.新建用户
+adduser testuser //新建testuser 用户
+passwd testuser //给testuser 用户设置密码
+2.建工作组
+groupadd testgroup //新建test工作组
+
+3.新建用户同时增加工作组
+useradd -g testgroup testuser //新建testuser用户并增加到testgroup工作组
+//注：：-g 所属组 -d 家目录 -s 所用的SHELL
+
+4.给已有的用户增加工作组
+usermod -G groupname username
+
+5.临时关闭
+在/etc/shadow文件中属于该用户的行的第二个字段（密码）前面加上就可以了。想恢复该用户，去掉即可
+//或者使用如下命令关闭用户账号：
+passwd testuser –l
+//重新释放：
+passwd testuser –u
+
+6.永久性删除用户账号
+userdel testuser
+groupdel testgroup
+usermod –G testgroup testuser //（强制删除该用户的主目录和主目录下的所有文件和子目录）
+
+7.显示用户信息
+id user
+cat /etc/passwd
+
+补充:查看用户和用户组的方法
+用户列表文件：/etc/passwd
+用户组列表文件：/etc/group
+查看系统中有哪些用户：cut -d : -f 1 /etc/passwd
+查看可以登录系统的用户：cat /etc/passwd | grep -v /sbin/nologin | cut -d : -f 1
+查看用户操作：w命令(需要root权限)
+查看某一用户：w 用户名
+查看登录用户：who
+查看用户登录历史记录：last
+
+
+
 如何查找异常用户
 ll /var/security/log	#安全日志
 vim /etc/hosts.deny   ALL: 188.xxx.xxx.xxx	#黑名单
@@ -348,34 +389,38 @@ logs目录将映射为mysql容器的日志目录
 conf目录里的配置文件将映射为mysql容器的配置文件，在conf目录下创建my.cnf文件
 vim /opt/mysql/conf/my.cnf #创建并编辑配置文件，加入以下内容
 [mysqld]
-user=mysql
-character-set-server=utf8
-default_authentication_plugin=mysql_native_password
-[client]
-default-character-set=utf8
-[mysql]
-default-character-set=utf8
+pid-file=/var/run/mysqld/mysqld.pid
+socket=/var/run/mysqld/mysqld.sock
+datadir=/var/lib/mysql
+secure-file-priv= NULL
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+default_authentication_plugin= mysql_native_password
+
 4. 运行容器（先进入到/opt/mysql目录下）
-docker run 
-	-p 3306:3306  #将容器的 3306 端口映射到主机的 3306 端口
-	--name mysql8.0	#镜像名称
-	-v $PWD/conf:/etc/mysql/conf.d #将主机当前目录下的 conf/my.cnf 挂载到容器的 /etc/mysql/my.cnf
-	-v $PWD/logs:/logs	#将主机当前目录下的 logs 目录挂载到容器的 /logs。
-	-v $PWD/data:/var/lib/mysql	#将主机当前目录下的data目录挂载到容器的 /var/lib/mysql 
-	-e MYSQL_ROOT_PASSWORD=123456	#root用户密码设置
-	-d	#后台运行
-	mysql：tag  #目标镜像
-	
+
+docker run \
+-p 3306:3306 \  #将容器的 3306 端口映射到主机的 3306 端口
+--name mysql8 \  	#容器名称
+--restart=always \ #容器自己启动
+-v /opt/mysql/conf:/etc/mysql/conf.d \
+-v /opt/mysql/logs:/var/log/mysql \  #将主机当前目录下的 logs 目录挂载到容器的 /logs。
+-v /opt/mysql/data:/var/lib/mysql	#将主机当前目录下的data目录挂载到容器的 /var/lib/mysql
+-e MYSQL_ROOT_PASSWORD=meiyou \  #root用户密码设置
+-d \  #后台运行
+mysql #目标镜像
+
+
 有时候会出现Container启动不起来，可以看日志：（发现是权限问题）
 docker logs -t --since 10m mysql8.0 
 可以加 --privileged=true
 
 [root@test2 ~]# docker ps -a	#查看运行的镜像
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                               NAMES
-1c52224315bf        mysql:8.0           "docker-entrypoint..."   56 seconds ago      Up 55 seconds       33060/tcp, 0.0.0.0:3307->3306/tcp   mysql8.0
+1c52224315bf        mysql:8            "docker-entrypoint..."   56 seconds ago      Up 55 seconds       33060/tcp, 0.0.0.0:3307->3306/tcp   mysql8
 
 5. 进入镜像运行MySQL
-[root@test2 ~]# docker exec -it mysql8.0 /bin/bash #进入MySQL容器（注：exec docker：进入容器命令 -it：容器中服务别名 /bin/bash：表示命令行模式与-d后台守护进行模式启动形成两种运行方式）
+[root@test2 ~]# docker exec -it mysql8 /bin/bash #进入MySQL容器（注：exec docker：进入容器命令 -it：容器中服务别名 /bin/bash：表示命令行模式与-d后台守护进行模式启动形成两种运行方式）
 [root@test2 ~]# root@1c52224315bf:/# cd /usr/bin	#进入方式
 [root@test2 ~]# root@1c52224315bf:/usr/bin# mysql -u root -p		# 进入MySQL
 Enter password: 
@@ -384,11 +429,21 @@ Your MySQL connection id is 9
 Server version: 8.0.16 MySQL Community Server - GPL
 
 另外：也可在主机上访问docker主机上的mysql
+docker exec -it mysql8 /bin/sh
 > 登录mysql
 mysql -u root -p
 > 修改mysql8 用户密码sha2问题
-ALTER USER 'root'@'%' IDENTIFIED BY '123456' PASSWORD EXPIRE NEVER;
-ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password by '123456';
+ALTER USER 'root'@'%' IDENTIFIED BY 'meiyou' PASSWORD EXPIRE NEVER;
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password by 'meiyou';
+
+
+
+
+ALTER USER 'mslave'@'192.168.40.%' IDENTIFIED BY 'meiyou' PASSWORD EXPIRE NEVER;
+ALTER USER 'mslave'@'192.168.40.%' IDENTIFIED WITH mysql_native_password by 'meiyou';
+
+
+
 flush privileges;
 至此Doker中安装、调配使用MySQL 8.0完成。
 
@@ -398,18 +453,58 @@ flush privileges;
 	docker rmi 镜像名：tag or 镜像id		# 移除已经安装的镜像
 	docker stop/start 容器服务别名  or 容器id		# 停止/启动/删除容器服务
 	docker rm 容器服务别名  or 容器id	#移除容器
+	docker inspect container_name | grep Mounts -A 20  #查看容器挂载情况
 
 
 centos7安装jdk：
 1. 下载jdk的rpm安装包
 centos7下载jdk方式：要加一个--no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie;"参数
 wget --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie;" https://download.oracle.com/otn-pub/java/jdk/14+36/076bab302c7b4508975440c56f6cc26a/jdk-14_linux-x64_bin.rpm
+wget --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie;" https://download.oracle.com/otn/java/jdk/11.0.6+8/90eb79fb590d45c8971362673c5ab495/jdk-11.0.6_linux-x64_bin.rpm
 2. sudo rpm -ivh jdk*    #默认将文件安装到/usr/java目录下
 3. vim /etc/profile    #更改环境变量
-export JAVA_HOME=/usr/java/jdks/jdk-14
+export JAVA_HOME=/root/javautils/jdk-11.0.6
 export CLASSPATH=.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 export PATH=$PATH:$JAVA_HOME/bin
 4. source /etc/profile
+
+
+
+/root/javautils/jdk-11.0.6
+
+
+
+
+CentOS7清理yum缓存和释放内存方法
+
+清理yum缓存
+清理yum缓存使用yum clean 命令，yum clean 的参数有headers, packages, metadata, dbcache, plugins, expire-cache, rpmdb, all
+
+yum clean headers  #清理/var/cache/yum的headers
+yum clean packages #清理/var/cache/yum下的软件包
+yum clean metadata
+...
+Linux释放内存
+释放网页缓存(To free pagecache):
+
+sync; echo 1 > /proc/sys/vm/drop_caches
+释放目录项和索引(To free dentries and inodes):
+
+sync; echo 2 > /proc/sys/vm/drop_caches
+释放网页缓存，目录项和索引（To free pagecache, dentries and inodes）:
+
+sync; echo 3 > /proc/sys/vm/drop_caches
+下面是我实际的数据。
+
+[root@localhost ~]# free -m    #查看内存
+              total        used        free      shared  buff/cache   available
+Mem:            481         224         120           1         136         202
+Swap:          1023         283         740
+[root@localhost ~]# sync; echo 3 > /proc/sys/vm/drop_caches
+[root@localhost ~]# free -m    #从120到186，释放了66m的内存
+              total        used        free      shared  buff/cache   available
+Mem:            481         209         186           1          85         222
+Swap:          1023         283         740
 
 
 
@@ -452,33 +547,93 @@ i:安装 ；v:显示 ；h:hash加密。
 
 
 
+同步服务器的时间
+1.安装ntpdate工具
+sudo yum -y install ntp ntpdate
+2.设置系统时间与网络时间同步
+sudo ntpdate cn.pool.ntp.org
+3.将系统时间写入硬件时间
+sudo hwclock --systohc
 
 
 
 
+在配置之前，如果数据库已存在数据，请先进行备份
+mysqldump -uroot -pmysql --all-databases --lock-all-tables > ~/master_db.sql
+
+-u ：用户名
+-p ：示密码
+--all-databases ：导出所有数据库
+--lock-all-tables ：执行操作时锁住所有表，防止操作时有数据修改
+~/master_db.sql :导出的备份数据（sql文件）位置，可自己指定
+
+2、主从配置
+演示的环境如下：
+名称
+IP
+msyql-master（主库）
+192.168.40.123
+mysql-slave（从库）
+192.168.40.45/46/47
+
+首先在这四台服务器安装mysql数据库
+（1）配置主库
+修改my.cnf文件，
 
 
+[mysqld]
+server-id = 1
+log-bin = mysql-bin
+binlog_format = ROW
+
+修改好配置文件，重启mysql服务
+service mysqld restart
+
+创建从库同步数据的账号
+mysql> create user 'mslave'@'192.168.40.%' identified by 'meiyou';
+mysql> grant all privileges on *.* to 'mslave'@'192.168.40.%' with grant option;（grant 权限列表 on 数据库 to 用户名@访问主机）
+
+#sha2问题
+mysql> ALTER USER 'mslave'@'192.168.40.%' IDENTIFIED BY 'meiyou' PASSWORD EXPIRE NEVER;
+mysql> ALTER USER 'mslave'@'192.168.40.%' IDENTIFIED WITH mysql_native_password by 'meiyou';
+
+mysql> flush privileges;
+
+192.168.50.% 表示该网段下的从服务器
+*.* 为当前服务器所有库所有表
+with grant option 为表示该用户可以将自己拥有的权限授权给别人
+mslave 为可设置的新用户名
+password 为可设置的密码
+flush privileges 命令本质上的作用是将当前user和privilige表中的用户信息/权限设置从mysql库(MySQL数据库的内置库)中提取到内存里。MySQL用户数据和权限有修改后，希望在"不重启MySQL服务"的情况下直接生效，那么就需要执行这个命令。通常是在修改ROOT帐号的设置后，怕重启后无法再登录进来，那么直接flush之后就可以看权限设置是否生效。而不必冒太大风险。
 
 
+注意：上面这两个命令是在mysql的终端执行的。
 
+查看主库的状态：
+mysql的终端执行:
+show master status\G;
 
+注意会在这里得到一个sql的执行文件，加入到从服务器的配置中
 
+（2）配置从库
+修改my.cnf文件，
+[mysqld]
+server-id = 2
+log-bin = mysql-bin
+binlog_format = ROW
 
+修改好配置文件，重启mysql服务
+service mysqld restart
 
+执行同步命令
+mysql的终端执行:
+# 设置主服务器ip，同步账号密码，同步位置
+change master to master_host='192.168.40.123',master_user='mslave',master_password='meiyou',master_log_file='mysql-bin.000005';
 
+# 开启同步功能
+start slave;
 
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
+查看从库的状态
+mysql的终端执行:
+show slave status\G;
 

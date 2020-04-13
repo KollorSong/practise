@@ -1,0 +1,228 @@
+{
+    height: 28px !important;
+    width: 950px !important;
+    overflow: hidden;
+    display: block !important;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.popup-content{background:#ffccce;}.popup-content .cats-tree .snd-pop-inner{background:#ffccce;}
+
+/*
+#255 204 206;
+ */
+
+a:hover {
+// 鼠标滑过效果
+text-decoration: none;
+background: #C0D9D9;
+font-size: 14px;
+font-weight: 500;
+}
+
+
+.skin-box-bd {
+// 导航框
+background-image: none;
+background-color: transparent;
+}
+
+
+.skin-box-bd .menu-list {
+// 菜单栏
+background-image: none;
+background-color: transparent;
+}
+
+
+.all-cats {
+// 所有分类
+background-image: none;
+background-color: transparent;
+}
+
+
+.all-cats .link {
+// 分类链接
+background-image: none;
+background-color: transparent;
+}
+
+
+.all-cats .all-cats-trigger .link .popup-icon {
+// 所有分类箭头图标
+background-image: none;
+background-color: transparent;
+}
+
+
+.popup-icon {
+// 所有分类箭头图标
+background-image: none;
+background-color: transparent;
+}
+
+
+.all-cats .link .title {
+// 分类文字
+color: red;
+font-size: 14px;
+font-weight: 500;
+background-image: none;
+background-color: transparent;
+}
+
+
+.menu-list .menu {
+// 菜单
+display: block;
+background-image: none;
+background-color: transparent;
+}
+
+.menu-list .link {
+// 菜单链接
+dispaly: block;
+background-image: none;
+background-color: transparent;
+}
+
+
+.menu-list .menu .link .title {
+// 导航菜单文字
+color: red;
+font-size: 14px;
+font-weight: 500;
+}
+
+
+.menu-list .menu-hover .link {
+// 导航菜单滑过 display: block;
+    background: #C0D9D9;
+}
+
+
+.menu-list .menu-hover .link .title {
+// 导航菜单滑过文字 color: green;
+
+    display: block;
+    background: #C0D9D9;
+}
+
+
+.menu-list .menu-selected {
+// 当前显示页面菜单 display: block;
+    background: #C0D9D9;
+}
+
+
+.menu-list .menu-selected .link {
+// 当前显示页面链接 border-bottom-color: red;
+
+    background-color: #C0D9D9;
+    display: block;
+}
+
+
+.menu-list .menu-selected .link .title {
+// 当前页面显示文字 display: block;
+
+    color: gray;
+
+    height: 28px;
+
+    border-bottom-color: white;
+
+    background-color: #C0D9D9;
+
+}
+
+
+/*
+
+第一部分、静态背景颜色
+
+1、首页/店铺动态/其它导航类目的背景色，这里设为红色
+.skin-box-bd .menu-list .link{background:red;}
+2、所有分类的背景色（最左边的），一样设为红色
+.all-cats .link{background:red;}
+到这里，发觉右边的颜色还没有变呢，好的，接着下一步
+3、导航条整个分类段背景色，还是要设为红色，整体布局好看些
+.skin-box-bd .menu-list{background:red;}
+注意观察，最右边还有一丝地方没有变
+4、导航条背景色（是最底层了吧），修补导航右侧缺口，再设为红色
+.skin-box-bd{background:red;}
+小结：有点成功感了！换换其它颜色试试看吧
+背景色最好搭配页头背景图，才能整体大气美观
+
+
+第二部分、分隔线、静态文字的颜色
+5、首页等分类的右边的分隔线颜色，设为白色
+.menu-list .menu{border-color:white;}
+6、所有分类的右边的分隔线颜色，设为白色
+.all-cats .link{border-color:white;}
+7、首页/店铺动态/其它导航类目的文字颜色
+.menu-list .menu .title{color:yellow;}
+8、所有分类的文字颜色（最左边那个）,
+.all-cats .link .title{color:yellow;}
+小结：其实原来默认文字的颜色也挺好的
+
+
+第三部分、分类下的颜色
+9、二级分类的背景色，设为灰色
+.popup-content{background:gray;}
+10、三级分类的背景色，我设为深灰色
+.popup-content .cats-tree .snd-pop-inner{background:#504f4f;}
+11、二级分类的文字颜色，设为黄色
+.popup-content .cat-name{color:yellow;}
+12、三级分类的文字颜色。（如果后面要鼠标滑过变色<21.22>，这句要写）
+.popup-content .cats-tree .snd-pop-inner .cat-name{color:yellow;}
+
+小结：上面这句不写，和二级分类颜色是一样的
+
+第四部分、鼠标滑过变背景色
+
+13、鼠标滑过首页/店铺动态/其它导航类目变换背景色，这设为蓝色
+.menu-list .menu-hover .link{background:blue;}
+14、鼠标滑过所有分类（最左边那个）变换背景色，这同样设为蓝色
+.all-cats-hover .link{background:blue;}
+15、鼠标滑过所有分类下的二级分类变换背景色，这设为蓝色
+.popup-content .cats-tree .cat-hd-hover{background:blue;}
+16、鼠标滑过所有分类下的三级分类变换背景色，这设为深蓝色
+.popup-content .cats-tree .snd-cat-hd-hover{background:#160595;}
+17、鼠标滑过导航类目下的宝贝分类变换背景色，这设为蓝色
+.menu-popup-cats .sub-cat-hover{background:blue;}
+
+小结：这个所有分类，与首页后面的，是要分开设计的
+
+
+第五部分、鼠标滑过变文字颜色
+
+18、鼠标滑过首页/店铺动态/其它导航类目变换文字颜色，这设为红色
+.menu-list .menu-hover .title{color:red;}
+19、鼠标滑过所有分类（最左边那个）变换文字颜色，这同样设为红色
+.all-cats-hover .link .title{color:red;}
+20、鼠标滑过导航类目下的宝贝分类变换文字颜色，这设为红色
+.menu-popup-cats .sub-cat-hover .cat-name{color:red;}
+21、鼠标滑过所有分类下的二级分类变换文字颜色，这设为红色
+.popup-content .cat-hd-hover .cat-name{color:red;}
+22、鼠标滑过所有分类下的三级分类变换文字颜色，这设为红色
+.popup-content .cats-tree .snd-cat-hd-hover .cat-name{color:red;}
+小结：这部分还是默认白色的好看
+
+第六部分、导航项目激活状态
+23、激活项目的文字背景色（难看，所以none）、文字颜色（选白色）
+.skin-box-bd .menu-list .menu-selected .link .title{background:none;color:white;}
+24、激活项目的项目背景色（项目框），选紫色
+.skin-box-bd .menu-list .menu-selected .link{background:purple;}
+小结：最多人忽视这部分，其实也是很多人想知道的
+
+*/
+
+
+
+
+
+
+

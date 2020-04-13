@@ -1,0 +1,11 @@
+
+vue高亮显示：
+1. 添加vue.js插件
+    File -> Settings -> Plugins
+2. 设置里头File Types: HTML 添加 *.vue类型
+    a. File -> Settings -> Editor -> File Types -> HTML
+    b. 点Registered Patterns下的+，添加 *.vue
+
+
+
+
