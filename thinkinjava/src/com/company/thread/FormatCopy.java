@@ -4,8 +4,17 @@ public class FormatCopy {
 
 
     public static void main(String[] args) {
-        byte[] aa = new byte[20];
-        printHexString("1521Abc45",aa);
+//        byte[] aa = new byte[20];
+//        printHexString("1521Abc45",aa);
+
+        int j =0;
+        for (int i = 0; i <10; i++) {
+            //j = j++;
+//            j = j+1;
+//            j++;
+            ++j;
+        }
+        System.out.println(j);
     }
 
     public static void printHexString(String hint, byte[] b) {
