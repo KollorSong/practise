@@ -51,8 +51,8 @@ public class TestBuffer {
 
 
     @Test
-    public void test3(){
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+    public void test3(){  //直接缓冲区和非直接缓冲区
+        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);  //直接缓冲区，将缓冲距建立在物理内存中
         System.out.println(byteBuffer.isDirect());
     }
 
@@ -88,13 +88,20 @@ public class TestBuffer {
 
         if (byteBuffer.hasRemaining()){  //是否含有剩余的可操作数据
             System.out.println("yes");
-            System.out.println(byteBuffer.remaining());
+            System.out.println(byteBuffer.remaining());  //获取剩余的数量
         }
 
 
 
 
     }
+
+
+
+
+
+
+
 
     @Test
     public void test1(){
@@ -108,18 +115,50 @@ public class TestBuffer {
         System.out.println("limt : "+bb.limit());
         System.out.println("position : "+bb.position());
 
+
+        //利用put()存入数据到缓冲区
         System.out.println("-----------------put()---------------------");
         bb.put(testStr.getBytes());
         System.out.println("capacity : "+bb.capacity());
         System.out.println("limt : "+bb.limit());
         System.out.println("position : "+bb.position());
 
+
+        //切换状态到读取
         System.out.println("++++++++++++++++++flip()+++++++++++++++++++");
         bb.flip();
         System.out.println("capacity : "+bb.capacity());
         System.out.println("limt : "+bb.limit());
         System.out.println("position : "+bb.position());
 
+        //获取缓冲区中的数据
+        System.out.println("=====================get()==================");
+        byte[] bytes = new byte[bb.limit()];
+        bb.get(bytes);
+        System.out.println("capacity : "+bb.capacity());
+        System.out.println("limt : "+bb.limit());
+        System.out.println("position : "+bb.position());
+        for (int i = 0; i < bytes.length; i++) {
+            System.out.println((char)bytes[i]);
+        }
+
+
+
+        //rewind(),重复读的操作
+        System.out.println("=============rewind========================");
+        bb.rewind();
+        System.out.println("capacity : "+bb.capacity());
+        System.out.println("limt : "+bb.limit());
+        System.out.println("position : "+bb.position());
+
+
+        //清空  ，不过数据仍然存在，不过处于被遗忘状态，因为position属性
+        System.out.println("=============clear()========================");
+        bb.clear();
+        System.out.println("capacity : "+bb.capacity());
+        System.out.println("limt : "+bb.limit());
+        System.out.println("position : "+bb.position());
+        System.out.println((char) bb.get(1));
 
 
     }
