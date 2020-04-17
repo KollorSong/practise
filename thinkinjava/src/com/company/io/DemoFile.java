@@ -28,7 +28,13 @@ public class DemoFile {
 
     @Test
     public void testStructor(){
-        show01();;
+//        show01();
+        show03();
+    }
+
+    private void show03() {
+
+        File file = new File()
     }
 
 
