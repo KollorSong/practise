@@ -34,7 +34,7 @@ public class DemoFile {
 
     private void show03() {
 
-        File file = new File()
+        File file = new File("adfa.txt");
     }
 
 
